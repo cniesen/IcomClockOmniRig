@@ -67,13 +67,7 @@ void hex2byte(const char* src, byte* target)
 
 int main()
 { 
-
-	byte byteArray[50] = { 0 };
-
-
-
-	std::cout << "Hello World!\n";
-
+	// Establish OmniRig COM connection
 	HRESULT hr = CoInitialize(nullptr);
 	if (FAILED(hr)) 
 		exit(E_OMNIRIG_COM_INIT);
@@ -90,6 +84,20 @@ int main()
 	);
 	if (FAILED(hr))
 		exit(E_OMNIRIG_COM_CREATE);
+
+	// Display OmniRig Version
+	printf("OmniRig Software Version:  %d.%d\n", HIWORD(pOmniRigX->GetSoftwareVersion()), LOWORD(pOmniRigX->GetSoftwareVersion()));
+	printf("OmniRig Interface Version: %d.%d\n", HIBYTE(pOmniRigX->GetInterfaceVersion()), LOBYTE(pOmniRigX->GetInterfaceVersion()));
+
+	// Display Rig Status
+	IRigXPtr pRig1 = pOmniRigX->GetRig1();
+	printf("Rig 1\n");
+	printf("    Rig Type: %s\n", _com_util::ConvertBSTRToString(pRig1->GetRigType()));
+	printf("    Status:   %s\n", _com_util::ConvertBSTRToString(pRig1->GetStatusStr()));
+	IRigXPtr pRig2 = pOmniRigX->GetRig2();
+	printf("Rig 2\n");
+	printf("    Rig Type: %s\n", _com_util::ConvertBSTRToString(pRig2->GetRigType()));
+	printf("    Status:   %s\n", _com_util::ConvertBSTRToString(pRig2->GetStatusStr()));
 
 	IRigXPtr pRig = pOmniRigX->GetRig1();
 	RigStatusX rigStatus = pRig->GetStatus();
@@ -158,7 +166,7 @@ int main()
 	frequency = pRig->GetFreqA();
 	std::cout << "Frequency A: " << frequency << "\n";
 
-
+	// Terminate OmniRig COM connection
 	pOmniRigX->Release();
 	CoUninitialize();
 
