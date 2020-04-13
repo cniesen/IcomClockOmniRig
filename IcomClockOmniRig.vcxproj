@@ -138,9 +138,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\OmniRigEventHandler.h" />
     <ClInclude Include="src\ExitCodes.h" />
+    <ClInclude Include="src\OmniRigEventHandler.h.old" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\OmniRigEventHandler.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -18,18 +18,19 @@
 
 #pragma once
 
-#define E_SUCCESS 0
+#include <windows.h>
 
-#define E_OMNIRIG_COM_INIT -10
-#define E_OMNIRIG_COM_CREATE -11
+class OmniRigEventHandler : public IDispatch {
+public:
+	OmniRigEventHandler();
+	STDMETHOD_(ULONG, AddRef)();
+	STDMETHOD_(ULONG, Release)();
+	STDMETHOD(QueryInterface)(REFIID riid, void** ppvObject);
+	STDMETHOD(GetTypeInfoCount)(UINT* pctinfo);
+	STDMETHOD(GetTypeInfo)(UINT itinfo, LCID lcid, ITypeInfo** pptinfo);
+	STDMETHOD(GetIDsOfNames)(REFIID riid, LPOLESTR* rgszNames, UINT cNames, LCID lcid, DISPID* rgdispid);
+	STDMETHOD(Invoke)(DISPID dispidMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS* pdispparams, VARIANT* pvarResult, EXCEPINFO* pexcepinfo, UINT* puArgErr);
 
-#define E_OMNIRIG_COM_OBTRAIN_CALLBACK_CONTAINTER_POINTER -20
-#define E_OMNIRIG_COM_OBTAIN_CALLBACK_REGISTRATION_POINTER -21
-#define E_OMNIRIG_OBTAIN_OUR_CALLBACK_FUNCTION_POINTER -22
-#define E_OMNIRIG_COM_REGISTER_CALLBACK_FUNCTION -23
+private:
+};
 
-#define E_OMNIRIG_STATUS_NOTCONFIGURED 50
-#define E_OMNIRIG_STATUS_DISABLED 51
-#define E_OMNIRIG_STATUS_PORTBUSY 52
-#define E_OMNIRIG_STATUS_NOTRESPONDING 53
-#define E_OMNIRIG_STATUS_UNKNOWN 54

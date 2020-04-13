@@ -25,7 +25,9 @@
 #include <sstream>
 #include <string>
 #include <time.h>
+#include <wtypes.h>
 #include "ExitCodes.h"
+#include "OmniRigEventHandler.h"
 
 #if OMNI_RIG_VERSION == 2
 	#import "C:\Program Files (x86)\Omni-Rig V2\omnirig2.exe"
@@ -73,14 +75,40 @@ void hex2byte(const char* src, byte* target)
 	}
 }
 
+HRESULT ParamsChange(long rigNumber, long params) {
+	std::string strCommand, strReply;
+
+	std::cout << params << " params have changed for rig " << rigNumber<<  "\n";
+
+	return 0;
+}
+
+HRESULT customReply(long RigNumber, const _variant_t& Command, const _variant_t& Reply) {
+	std::string strCommand, strReply;
+
+
+	if (Command.vt == VT_BSTR)
+		strCommand = _bstr_t(Command.bstrVal);
+	else
+		strCommand = "???";
+	if (Reply.vt == VT_BSTR)
+		strReply = _bstr_t(Reply.bstrVal);
+	else
+		strReply = "???";
+
+	std::cout << "Custom command response for: " << strCommand << " is " << strReply << "\n";
+
+	return 0;
+}
+
 
 int main()
 { 
 	// Establish OmniRig COM connection
 	HRESULT hr = CoInitialize(nullptr);
-	if (FAILED(hr)) 
+	if (FAILED(hr))
 		exit(E_OMNIRIG_COM_INIT);
-
+	
 	IOmniRigX* pOmniRigX = nullptr;
 
 	hr = CoCreateInstance(
@@ -89,7 +117,6 @@ int main()
 		CLSCTX_LOCAL_SERVER,
 		__uuidof(IOmniRigX),
 		reinterpret_cast<void**>(&pOmniRigX)
-
 	);
 	if (FAILED(hr))
 		exit(E_OMNIRIG_COM_CREATE);
@@ -117,6 +144,27 @@ int main()
 	printf("    Rig Type: %s\n", _com_util::ConvertBSTRToString(pRig4->GetRigType()));
 	printf("    Status:   %s\n", _com_util::ConvertBSTRToString(pRig4->GetStatusStr()));
 #endif
+
+
+	// Establish COM connection for custom reply events
+	IConnectionPointContainer* pCPC;
+	IConnectionPoint* pCP;
+	OmniRigEventHandler* pSink = new OmniRigEventHandler();
+	DWORD dwAdvise;
+
+	hr = pOmniRigX->QueryInterface(IID_IConnectionPointContainer, (void**)&pCPC);
+	if (FAILED(hr))
+		exit(E_OMNIRIG_COM_OBTRAIN_CALLBACK_CONTAINTER_POINTER);
+	hr = pCPC->FindConnectionPoint(__uuidof(IOmniRigXEvents), &pCP);
+	if (FAILED(hr))
+		exit(E_OMNIRIG_COM_OBTAIN_CALLBACK_REGISTRATION_POINTER);
+	pCPC->Release();
+	hr = pCP->QueryInterface(IID_IUnknown, (void**)&pSink);
+		if (FAILED(hr))
+			exit(E_OMNIRIG_OBTAIN_OUR_CALLBACK_FUNCTION_POINTER);
+	hr = pCP->Advise(pSink, &dwAdvise);
+	if (FAILED(hr))
+		exit(E_OMNIRIG_COM_REGISTER_CALLBACK_FUNCTION);
 
 	IRigXPtr pRig = pOmniRigX->GetRig1();
 	RigStatusX rigStatus = pRig->GetStatus();
@@ -185,6 +233,10 @@ int main()
 	frequency = pRig->GetFreqA();
 	std::cout << "Frequency A: " << frequency << "\n";
 
+	// Terminate COM connection for custom reply events
+	//pCP->Unadvise(dwAdvise);
+	//pCP->Release();
+	
 	// Terminate OmniRig COM connection
 	pOmniRigX->Release();
 	CoUninitialize();
