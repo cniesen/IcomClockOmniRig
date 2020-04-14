@@ -16,15 +16,24 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+// OmniRig version to be supported:
+//  1 = original VE3NEA version
+//  2 = updated HB9RYZ version
+#define OMNI_RIG_VERSION  1  
+
 #include <iostream>
 #include <sstream>
 #include <string>
 #include <time.h>
 #include "ExitCodes.h"
 
-
-#import "C:\Program Files (x86)\Afreet\OmniRig\OmniRig.exe"
-using namespace OmniRig;
+#if OMNI_RIG_VERSION == 2
+	#import "C:\Program Files (x86)\Omni-Rig V2\omnirig2.exe"
+	using namespace OmniRig;
+#else
+	#import "C:\Program Files (x86)\Afreet\OmniRig\OmniRig.exe"
+	using namespace OmniRig;
+#endif
 
 int offset(const SYSTEMTIME& utc, const SYSTEMTIME& local) {
 	FILETIME uft, lft;
@@ -98,6 +107,16 @@ int main()
 	printf("Rig 2\n");
 	printf("    Rig Type: %s\n", _com_util::ConvertBSTRToString(pRig2->GetRigType()));
 	printf("    Status:   %s\n", _com_util::ConvertBSTRToString(pRig2->GetStatusStr()));
+#if OMNI_RIG_VERSION == 2
+	IRigXPtr pRig3 = pOmniRigX->GetRig3();
+	printf("Rig 3\n");
+	printf("    Rig Type: %s\n", _com_util::ConvertBSTRToString(pRig3->GetRigType()));
+	printf("    Status:   %s\n", _com_util::ConvertBSTRToString(pRig3->GetStatusStr()));
+	IRigXPtr pRig4 = pOmniRigX->GetRig4();
+	printf("Rig 4\n");
+	printf("    Rig Type: %s\n", _com_util::ConvertBSTRToString(pRig4->GetRigType()));
+	printf("    Status:   %s\n", _com_util::ConvertBSTRToString(pRig4->GetStatusStr()));
+#endif
 
 	IRigXPtr pRig = pOmniRigX->GetRig1();
 	RigStatusX rigStatus = pRig->GetStatus();
