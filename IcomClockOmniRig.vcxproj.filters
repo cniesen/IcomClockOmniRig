@@ -18,10 +18,10 @@
     <ClInclude Include="src\ExitCodes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\OmniRigEventHandler.h.old">
+    <ClInclude Include="src\OmniRigEventHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\OmniRigEventHandler.h">
+    <ClInclude Include="src\OmniRigEventHandler2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

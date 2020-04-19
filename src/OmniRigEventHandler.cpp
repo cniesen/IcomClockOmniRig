@@ -15,7 +15,7 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
+/*
 #include "OmniRigEventHandler.h"
 
 OmniRigEventHandler::OmniRigEventHandler(){
@@ -82,3 +82,4 @@ STDMETHOD(Invoke)(DISPID dispidMember, REFIID riid,
 {
 	return (m_parent.*m_parent_on_invoke)(this, dispidMember, riid, lcid, wFlags, pdispparams, pvarResult, pexcepinfo, puArgErr);
 }
+*/

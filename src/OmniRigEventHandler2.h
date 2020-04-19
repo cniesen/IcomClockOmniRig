@@ -19,9 +19,9 @@
 #pragma once
 
 #include <windows.h>
-//#include <SHLOBJ.H>
-//#include <memory>
-//#include <string>
+#include <SHLOBJ.H>
+#include <memory>
+#include <string>
 
 namespace OmniRigEventHandlerNamespace
 {
@@ -42,7 +42,7 @@ namespace OmniRigEventHandlerNamespace
 				VARIANT* pvarResult,
 				EXCEPINFO* pexcepinfo,
 				UINT* puArgErr
-				);
+			);
 
 	public:
 		OmniRigEventHandler
@@ -133,17 +133,17 @@ namespace OmniRigEventHandlerNamespace
 		LONG						m_cRef;
 
 		// Pertaining to the owner of this object.
-		event_handler_class& m_parent;  // Non-reference counted. This is to prevent circular references.
+		event_handler_class & m_parent;  // Non-reference counted. This is to prevent circular references.
 
 		// Pertaining to connection points.
-		IConnectionPoint* m_pIConnectionPoint;  // Ref counted of course.
+		IConnectionPoint *			m_pIConnectionPoint;  // Ref counted of course.
 		DWORD						m_dwEventCookie;
 		parent_on_invoke			m_parent_on_invoke;
 
 		void SetupConnectionPoint(device_interface* pdevice_interface)
 		{
-			IConnectionPointContainer* pIConnectionPointContainerTemp = NULL;
-			IUnknown* pIUnknown = NULL;
+			IConnectionPointContainer*	pIConnectionPointContainerTemp = NULL;
+			IUnknown*					pIUnknown = NULL;
 
 			// QI this object itself for its IUnknown pointer which will be used 
 			// later to connect to the Connection Point of the device_interface object.

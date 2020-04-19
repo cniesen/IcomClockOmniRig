@@ -27,11 +27,13 @@
 #include <time.h>
 #include <wtypes.h>
 #include "ExitCodes.h"
-#include "OmniRigEventHandler.h"
+
+#include "OmniRigEventHandler2.h"
+using namespace OmniRigEventHandlerNamespace;
 
 #if OMNI_RIG_VERSION == 2
-	#import "C:\Program Files (x86)\Omni-Rig V2\omnirig2.exe"
-	using namespace OmniRig;
+	//#import "C:\Program Files (x86)\Omni-Rig V2\omnirig2.exe"
+	//using namespace OmniRig;
 #else
 	#import "C:\Program Files (x86)\Afreet\OmniRig\OmniRig.exe"
 	using namespace OmniRig;
@@ -145,6 +147,9 @@ int main()
 	printf("    Status:   %s\n", _com_util::ConvertBSTRToString(pRig4->GetStatusStr()));
 #endif
 
+	// References:
+	//     https://www.codeproject.com/Articles/9014/Understanding-COM-Event-Handling
+	//    https://books.google.com/books?id=kfRWvKSePmAC&pg=PA362&lpg=PA362&dq=IConnectionPointContainer*+pCPC;IConnectionPoint*+pCP;&source=bl&ots=o9iWj6dOhq&sig=ACfU3U2qBmLy2RRrhv5rRnA1hr59p5XRoA&hl=en&sa=X&ved=2ahUKEwiJwJvUrenoAhVVXM0KHS4JAaYQ6AEwAnoECAsQKg#v=onepage&q=IConnectionPointContainer*%20pCPC%3BIConnectionPoint*%20pCP%3B&f=false
 
 	// Establish COM connection for custom reply events
 	IConnectionPointContainer* pCPC;
@@ -159,7 +164,7 @@ int main()
 	if (FAILED(hr))
 		exit(E_OMNIRIG_COM_OBTAIN_CALLBACK_REGISTRATION_POINTER);
 	pCPC->Release();
-	hr = pCP->QueryInterface(IID_IUnknown, (void**)&pSink);
+	hr = pCP->QueryInterface(IID_IUnknown, (void**)&pSink); //--wrong
 		if (FAILED(hr))
 			exit(E_OMNIRIG_OBTAIN_OUR_CALLBACK_FUNCTION_POINTER);
 	hr = pCP->Advise(pSink, &dwAdvise);
@@ -234,8 +239,8 @@ int main()
 	std::cout << "Frequency A: " << frequency << "\n";
 
 	// Terminate COM connection for custom reply events
-	//pCP->Unadvise(dwAdvise);
-	//pCP->Release();
+	pCP->Unadvise(dwAdvise);
+	pCP->Release();
 	
 	// Terminate OmniRig COM connection
 	pOmniRigX->Release();
