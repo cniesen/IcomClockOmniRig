@@ -25,6 +25,7 @@
 #include <sstream>
 #include <string>
 #include <time.h>
+#include <wtypes.h>
 #include "ExitCodes.h"
 
 #if OMNI_RIG_VERSION == 2
@@ -71,6 +72,35 @@ void hex2byte(const char* src, byte* target)
 		*(target++) = char2byte(*src) * 16 + char2byte(src[1]);
 		src += 2;
 	}
+}
+
+HRESULT sendCustomCommand(const IRigXPtr pRig, const char* command) {
+	int commandLength = strlen(command) / 2;
+	int responseOkLength = 6;
+
+	byte bCommand[11] = { 0 };
+	hex2byte(command, bCommand);
+
+	SAFEARRAYBOUND saBound;
+	saBound.lLbound = 0;
+	saBound.cElements = commandLength;
+
+	SAFEARRAY* psa = SafeArrayCreate(VARENUM::VT_UI1, 1, &saBound);
+	if (psa == nullptr)
+		exit(E_INTERNAL_SAFEARRAY_CREATE);
+
+	HRESULT hr = SafeArrayLock(psa);
+	if (FAILED(hr))
+		exit(E_INTERNAL_SAFEARRAY_LOCK);
+	psa->pvData = bCommand;
+	hr = SafeArrayUnlock(psa);
+	if (FAILED(hr))
+		exit(E_INTERNAL_SAFEARRAY_UNLOCK);
+	
+	VARIANT vtCommand;
+	vtCommand.vt = VT_ARRAY | VT_UI1;
+	vtCommand.parray = psa;
+	return pRig->SendCustomCommand(vtCommand, commandLength + responseOkLength , "");
 }
 
 
@@ -173,15 +203,11 @@ int main()
 	}
 	std::cout << "Offset: " << offsetData << "\n";
 
-	//IOmniRigXEvents event;
-	byte command[11] = { 0 };
-	byte response[6] = { 0 };
-	hex2byte("FEFE94E01A0500951111FD", command);
-	hex2byte("FEFEE094FBFD", response);
+	sendCustomCommand(pRig, "FEFE94E01A0500951111FD");
+	if (FAILED(hr))
+		exit(E_INTERNAL_OMNIRIG_CUSTOMCOMMAND);
 
-	hr = pRig->SendCustomCommand(command, 6, response);
-	//hr = pRig->CustomReply()
-
+	
 	frequency = pRig->GetFreqA();
 	std::cout << "Frequency A: " << frequency << "\n";
 
