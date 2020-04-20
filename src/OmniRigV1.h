@@ -20,8 +20,7 @@
 
 #include "OmniRigBase.h"
 
-#import "C:\Program Files (x86)\Afreet\OmniRig\OmniRig.exe"
-using namespace OmniRig;
+#import "C:\Program Files (x86)\Afreet\OmniRig\OmniRig.exe"  rename_namespace("OmniRig1")
 
 class OmniRigV1 : public OmniRigBase {
 public:
@@ -29,8 +28,8 @@ public:
 	virtual ~OmniRigV1();
 	HRESULT sendCustomCommand(const char* command);
 private:
-	IOmniRigX* pOmniRigX = nullptr;
-	IRigXPtr pRig = nullptr;
-	void displayOmniRigInfo(IOmniRigX* pOmniRigX);
-	void displayRigInfo(IOmniRigX* pOmniRigX);
+	OmniRig1::IOmniRigX* pOmniRigX = nullptr;
+	OmniRig1::IRigXPtr pRig = nullptr;
+	void displayOmniRigInfo(OmniRig1::IOmniRigX* pOmniRigX);
+	void displayRigInfo(OmniRig1::IOmniRigX* pOmniRigX);
 };

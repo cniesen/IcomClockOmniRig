@@ -19,12 +19,15 @@
 #pragma once
 
 #include <iostream>
+#include <regex>
 #include <wtypes.h>
 
 class Utilities {
 public:
 	static void hex2byte(const char* src, byte* target);
 	static byte char2byte(char input);
+	static bool isDigit(const char* digit);
+	static bool isHex(const char* hex);
 private:
 	Utilities() {}   // Disallow instantiation
 };

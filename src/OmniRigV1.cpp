@@ -25,10 +25,10 @@ OmniRigV1::OmniRigV1(ProgramOptions options) {
 		exit(E_OMNIRIG_COM_INIT);
 
 	hr = CoCreateInstance(
-		__uuidof(OmniRigX),
+		__uuidof(OmniRig1::OmniRigX),
 		nullptr,
 		CLSCTX_LOCAL_SERVER,
-		__uuidof(IOmniRigX),
+		__uuidof(OmniRig1::IOmniRigX),
 		reinterpret_cast<void**>(&pOmniRigX)
 
 	);
@@ -52,17 +52,17 @@ OmniRigV1::OmniRigV1(ProgramOptions options) {
 			exit(E_OPTION_RIG_NUMBER);
 	}
 
-	RigStatusX rigStatus = pRig->GetStatus();
+	OmniRig1::RigStatusX rigStatus = pRig->GetStatus();
 	switch (rigStatus) {
-		case ST_NOTCONFIGURED:
+		case OmniRig1::ST_NOTCONFIGURED:
 			exit(E_OMNIRIG_STATUS_NOTCONFIGURED);
-		case ST_DISABLED:
+		case OmniRig1::ST_DISABLED:
 			exit(E_OMNIRIG_STATUS_DISABLED);
-		case ST_PORTBUSY:
+		case OmniRig1::ST_PORTBUSY:
 			exit(E_OMNIRIG_STATUS_PORTBUSY);
-		case ST_NOTRESPONDING:
+		case OmniRig1::ST_NOTRESPONDING:
 			exit(E_OMNIRIG_STATUS_NOTRESPONDING);
-		case ST_ONLINE:
+		case OmniRig1::ST_ONLINE:
 			break;
 		default:
 			exit(E_OMNIRIG_STATUS_UNKNOWN);
@@ -75,17 +75,17 @@ OmniRigV1::~OmniRigV1() {
 	CoUninitialize();
 }
 
-void OmniRigV1::displayOmniRigInfo(IOmniRigX* pOmniRigX) {
+void OmniRigV1::displayOmniRigInfo(OmniRig1::IOmniRigX* pOmniRigX) {
 	printf("OmniRig Software Version:  %d.%d\n", HIWORD(pOmniRigX->GetSoftwareVersion()), LOWORD(pOmniRigX->GetSoftwareVersion()));
 	printf("OmniRig Interface Version: %d.%d\n", HIBYTE(pOmniRigX->GetInterfaceVersion()), LOBYTE(pOmniRigX->GetInterfaceVersion()));
 }
 
-void OmniRigV1::displayRigInfo(IOmniRigX* pOmniRigX) {
-	IRigXPtr pRig1 = pOmniRigX->GetRig1();
+void OmniRigV1::displayRigInfo(OmniRig1::IOmniRigX* pOmniRigX) {
+	OmniRig1::IRigXPtr pRig1 = pOmniRigX->GetRig1();
 	printf("Rig 1\n");
 	printf("    Rig Type: %s\n", _com_util::ConvertBSTRToString(pRig1->GetRigType()));
 	printf("    Status:   %s\n", _com_util::ConvertBSTRToString(pRig1->GetStatusStr()));
-	IRigXPtr pRig2 = pOmniRigX->GetRig2();
+	OmniRig1::IRigXPtr pRig2 = pOmniRigX->GetRig2();
 	printf("Rig 2\n");
 	printf("    Rig Type: %s\n", _com_util::ConvertBSTRToString(pRig2->GetRigType()));
 	printf("    Status:   %s\n", _com_util::ConvertBSTRToString(pRig2->GetStatusStr()));

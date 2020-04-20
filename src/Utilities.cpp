@@ -39,3 +39,11 @@ void Utilities::hex2byte(const char* src, byte* target)
 		src += 2;
 	}
 }
+
+bool Utilities::isDigit(const char* digit) {
+    return std::regex_match(std::string(digit), std::regex("[0-9]"));
+}
+
+bool Utilities::isHex(const char* hex) {
+	return std::regex_match(std::string(hex), std::regex("[a-fA-F0-9]{2}"));
+}

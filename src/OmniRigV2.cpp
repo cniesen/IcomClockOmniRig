@@ -25,17 +25,17 @@ OmniRigV2::OmniRigV2(ProgramOptions options) {
 		exit(E_OMNIRIG_COM_INIT);
 
 	hr = CoCreateInstance(
-		__uuidof(OmniRigX),
+		__uuidof(OmniRig2::OmniRigX),
 		nullptr,
 		CLSCTX_LOCAL_SERVER,
-		__uuidof(IOmniRigX),
+		__uuidof(OmniRig2::IOmniRigX),
 		reinterpret_cast<void**>(&pOmniRigX)
 
 	);
 	if (FAILED(hr))
 		exit(E_OMNIRIG_COM_CREATE);
 
-	if (!options.isQuiet) {
+	if (!options.isQuiet()) {
 		displayOmniRigInfo(pOmniRigX);
 		displayRigInfo(pOmniRigX);
 	}
@@ -58,17 +58,17 @@ OmniRigV2::OmniRigV2(ProgramOptions options) {
 			exit(E_OPTION_RIG_NUMBER);
 	}
 
-	RigStatusX rigStatus = pRig->GetStatus();
+	OmniRig2::RigStatusX rigStatus = pRig->GetStatus();
 	switch (rigStatus) {
-		case ST_NOTCONFIGURED:
+		case OmniRig2::ST_NOTCONFIGURED:
 			exit(E_OMNIRIG_STATUS_NOTCONFIGURED);
-		case ST_DISABLED:
+		case OmniRig2::ST_DISABLED:
 			exit(E_OMNIRIG_STATUS_DISABLED);
-		case ST_PORTBUSY:
+		case OmniRig2::ST_PORTBUSY:
 			exit(E_OMNIRIG_STATUS_PORTBUSY);
-		case ST_NOTRESPONDING:
+		case OmniRig2::ST_NOTRESPONDING:
 			exit(E_OMNIRIG_STATUS_NOTRESPONDING);
-		case ST_ONLINE:
+		case OmniRig2::ST_ONLINE:
 			break;
 		default:
 			exit(E_OMNIRIG_STATUS_UNKNOWN);
@@ -81,25 +81,25 @@ OmniRigV2::~OmniRigV2() {
 	CoUninitialize();
 }
 
-void OmniRigV2::displayOmniRigInfo(IOmniRigX* pOmniRigX) {
+void OmniRigV2::displayOmniRigInfo(OmniRig2::IOmniRigX* pOmniRigX) {
 	printf("OmniRig Software Version:  %d.%d\n", HIWORD(pOmniRigX->GetSoftwareVersion()), LOWORD(pOmniRigX->GetSoftwareVersion()));
 	printf("OmniRig Interface Version: %d.%d\n", HIBYTE(pOmniRigX->GetInterfaceVersion()), LOBYTE(pOmniRigX->GetInterfaceVersion()));
 }
 
-void OmniRigV2::displayRigInfo(IOmniRigX* pOmniRigX) {
-	IRigXPtr pRig1 = pOmniRigX->GetRig1();
+void OmniRigV2::displayRigInfo(OmniRig2::IOmniRigX* pOmniRigX) {
+	OmniRig2::IRigXPtr pRig1 = pOmniRigX->GetRig1();
 	printf("Rig 1\n");
 	printf("    Rig Type: %s\n", _com_util::ConvertBSTRToString(pRig1->GetRigType()));
 	printf("    Status:   %s\n", _com_util::ConvertBSTRToString(pRig1->GetStatusStr()));
-	IRigXPtr pRig2 = pOmniRigX->GetRig2();
+	OmniRig2::IRigXPtr pRig2 = pOmniRigX->GetRig2();
 	printf("Rig 2\n");
 	printf("    Rig Type: %s\n", _com_util::ConvertBSTRToString(pRig2->GetRigType()));
 	printf("    Status:   %s\n", _com_util::ConvertBSTRToString(pRig2->GetStatusStr()));
-	IRigXPtr pRig3 = pOmniRigX->GetRig3();
+	OmniRig2::IRigXPtr pRig3 = pOmniRigX->GetRig3();
 	printf("Rig 3\n");
 	printf("    Rig Type: %s\n", _com_util::ConvertBSTRToString(pRig3->GetRigType()));
 	printf("    Status:   %s\n", _com_util::ConvertBSTRToString(pRig3->GetStatusStr()));
-	IRigXPtr pRig4 = pOmniRigX->GetRig4();
+	OmniRig2::IRigXPtr pRig4 = pOmniRigX->GetRig4();
 	printf("Rig 4\n");
 	printf("    Rig Type: %s\n", _com_util::ConvertBSTRToString(pRig4->GetRigType()));
 	printf("    Status:   %s\n", _com_util::ConvertBSTRToString(pRig4->GetStatusStr()));
@@ -110,7 +110,7 @@ HRESULT OmniRigV2::sendCustomCommand(const char* command) {
 	int responseOkLength = 6;
 
 	byte bCommand[11] = { 0 };
-	hex2byte(command, bCommand);
+	Utilities::hex2byte(command, bCommand);
 
 	SAFEARRAYBOUND saBound;
 	saBound.lLbound = 0;

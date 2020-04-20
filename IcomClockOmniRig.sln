@@ -7,12 +7,18 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IcomClockOmniRig", "IcomClo
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug (with -h)|x64 = Debug (with -h)|x64
+		Debug (with -h)|x86 = Debug (with -h)|x86
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C199A420-40C3-40BE-B3E6-0DC7444EA582}.Debug (with -h)|x64.ActiveCfg = Debug (with -h)|x64
+		{C199A420-40C3-40BE-B3E6-0DC7444EA582}.Debug (with -h)|x64.Build.0 = Debug (with -h)|x64
+		{C199A420-40C3-40BE-B3E6-0DC7444EA582}.Debug (with -h)|x86.ActiveCfg = Debug (with -h)|Win32
+		{C199A420-40C3-40BE-B3E6-0DC7444EA582}.Debug (with -h)|x86.Build.0 = Debug (with -h)|Win32
 		{C199A420-40C3-40BE-B3E6-0DC7444EA582}.Debug|x64.ActiveCfg = Debug|x64
 		{C199A420-40C3-40BE-B3E6-0DC7444EA582}.Debug|x64.Build.0 = Debug|x64
 		{C199A420-40C3-40BE-B3E6-0DC7444EA582}.Debug|x86.ActiveCfg = Debug|Win32

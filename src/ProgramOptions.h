@@ -17,7 +17,10 @@
 */
 
 #pragma once
-#include <string>
+
+#include <iostream>
+#include "ExitCodes.h"
+#include "Utilities.h"
 
 enum class OmniRigVersion {
 	OmniRigVersion1,  // original OmniRig by VE3NEA
@@ -32,4 +35,11 @@ public:
 	std::string getTranceiverAddress();
 	OmniRigVersion getOmnirigVersion();
 	bool isQuiet();
+private:
+	bool reversedTimeZone = false;
+	int rigNumber = 1;
+	std::string tranceiverAddress = "94";
+	OmniRigVersion omnirigVersion = OmniRigVersion::OmniRigVersion1;
+	bool quiet = false;
+	void printHelp(std::string programName);
 };
