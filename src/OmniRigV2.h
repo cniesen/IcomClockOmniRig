@@ -18,24 +18,18 @@
 
 #pragma once
 
-#define E_SUCCESS 0
+#include "OmniRigBase.h"
 
-#define E_OPTION_INVALID -1
-#define E_OPTION_RIG_NUMBER -2
-#define E_OPTION_TRANSCEIVER_NUMBER -3
-#define E_OPTION_OMNIRIG_VERSION -4
+#import "C:\Program Files (x86)\Omni-Rig V2\omnirig2.exe" rename_namespace("OmniRig2")
 
-#define E_OMNIRIG_COM_INIT -10
-#define E_OMNIRIG_COM_CREATE -11
-
-#define E_OMNIRIG_STATUS_NOTCONFIGURED 50
-#define E_OMNIRIG_STATUS_DISABLED 51
-#define E_OMNIRIG_STATUS_PORTBUSY 52
-#define E_OMNIRIG_STATUS_NOTRESPONDING 53
-#define E_OMNIRIG_STATUS_UNKNOWN 54
-
-#define E_INTERNAL_OMNIRIG_CUSTOMCOMMAND 500
-
-#define E_INTERNAL_SAFEARRAY_CREATE 1011
-#define E_INTERNAL_SAFEARRAY_LOCK 1012
-#define E_INTERNAL_SAFEARRAY_UNLOCK 1013
+class OmniRigV2 : public OmniRigBase {
+public:
+	OmniRigV2(ProgramOptions options);
+	virtual ~OmniRigV2();
+	HRESULT sendCustomCommand(const char* command);
+private:
+	OmniRig2::IOmniRigX* pOmniRigX = nullptr;
+	OmniRig2::IRigXPtr pRig = nullptr;
+	void displayOmniRigInfo(OmniRig2::IOmniRigX* pOmniRigX);
+	void displayRigInfo(OmniRig2::IOmniRigX* pOmniRigX);
+};

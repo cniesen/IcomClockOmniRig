@@ -18,24 +18,28 @@
 
 #pragma once
 
-#define E_SUCCESS 0
+#include <iostream>
+#include "ExitCodes.h"
+#include "Utilities.h"
 
-#define E_OPTION_INVALID -1
-#define E_OPTION_RIG_NUMBER -2
-#define E_OPTION_TRANSCEIVER_NUMBER -3
-#define E_OPTION_OMNIRIG_VERSION -4
+enum class OmniRigVersion {
+	OmniRigVersion1,  // original OmniRig by VE3NEA
+	OmniRigVersion2   // updated OmniRig by HB9RYZ
+};
 
-#define E_OMNIRIG_COM_INIT -10
-#define E_OMNIRIG_COM_CREATE -11
-
-#define E_OMNIRIG_STATUS_NOTCONFIGURED 50
-#define E_OMNIRIG_STATUS_DISABLED 51
-#define E_OMNIRIG_STATUS_PORTBUSY 52
-#define E_OMNIRIG_STATUS_NOTRESPONDING 53
-#define E_OMNIRIG_STATUS_UNKNOWN 54
-
-#define E_INTERNAL_OMNIRIG_CUSTOMCOMMAND 500
-
-#define E_INTERNAL_SAFEARRAY_CREATE 1011
-#define E_INTERNAL_SAFEARRAY_LOCK 1012
-#define E_INTERNAL_SAFEARRAY_UNLOCK 1013
+class ProgramOptions {
+public:
+	ProgramOptions(int argc, char* argv[]);
+	bool isReversedTimeZone();
+	int getRigNumber();
+	std::string getTranceiverAddress();
+	OmniRigVersion getOmnirigVersion();
+	bool isQuiet();
+private:
+	bool reversedTimeZone = false;
+	int rigNumber = 1;
+	std::string tranceiverAddress = "94";
+	OmniRigVersion omnirigVersion = OmniRigVersion::OmniRigVersion1;
+	bool quiet = false;
+	void printHelp(std::string programName);
+};

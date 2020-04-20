@@ -16,26 +16,21 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#pragma once
+#include "OmniRigBase.h"
 
-#define E_SUCCESS 0
+OmniRigBase::OmniRigBase() {
 
-#define E_OPTION_INVALID -1
-#define E_OPTION_RIG_NUMBER -2
-#define E_OPTION_TRANSCEIVER_NUMBER -3
-#define E_OPTION_OMNIRIG_VERSION -4
+}
 
-#define E_OMNIRIG_COM_INIT -10
-#define E_OMNIRIG_COM_CREATE -11
+OmniRigBase::OmniRigBase(ProgramOptions options) {
 
-#define E_OMNIRIG_STATUS_NOTCONFIGURED 50
-#define E_OMNIRIG_STATUS_DISABLED 51
-#define E_OMNIRIG_STATUS_PORTBUSY 52
-#define E_OMNIRIG_STATUS_NOTRESPONDING 53
-#define E_OMNIRIG_STATUS_UNKNOWN 54
+}
 
-#define E_INTERNAL_OMNIRIG_CUSTOMCOMMAND 500
+OmniRigBase::~OmniRigBase()
+{
+}
 
-#define E_INTERNAL_SAFEARRAY_CREATE 1011
-#define E_INTERNAL_SAFEARRAY_LOCK 1012
-#define E_INTERNAL_SAFEARRAY_UNLOCK 1013
+HRESULT OmniRigBase::sendCustomCommand(const char* command)
+{
+	return E_NOTIMPL;
+}

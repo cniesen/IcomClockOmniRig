@@ -16,25 +16,12 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// OmniRig version to be supported:
-//  1 = original VE3NEA version
-//  2 = updated HB9RYZ version
-#define OMNI_RIG_VERSION  1  
-
-#include <iostream>
 #include <sstream>
-#include <string>
 #include <time.h>
-#include <wtypes.h>
 #include "ExitCodes.h"
-
-#if OMNI_RIG_VERSION == 2
-	#import "C:\Program Files (x86)\Omni-Rig V2\omnirig2.exe"
-	using namespace OmniRig;
-#else
-	#import "C:\Program Files (x86)\Afreet\OmniRig\OmniRig.exe"
-	using namespace OmniRig;
-#endif
+#include "OmniRigV1.h"
+#include "OmniRigV2.h"
+#include "ProgramOptions.h"
 
 int offset(const SYSTEMTIME& utc, const SYSTEMTIME& local) {
 	FILETIME uft, lft;
@@ -52,124 +39,22 @@ std::string toString(const T& value) {
 	return os.str();
 }
 
-byte char2byte(char input)
-{
-	if (input >= '0' && input <= '9')
-		return input - '0';
-	if (input >= 'A' && input <= 'F')
-		return input - 'A' + 10;
-	if (input >= 'a' && input <= 'f')
-		return input - 'a' + 10;
-	throw std::invalid_argument("Invalid input string");
-}
 
-// This function assumes src to be a zero terminated sanitized string with
-// an even number of [0-9a-f] characters, and target to be sufficiently large
-void hex2byte(const char* src, byte* target)
-{
-	while (*src && src[1])
-	{
-		*(target++) = char2byte(*src) * 16 + char2byte(src[1]);
-		src += 2;
-	}
-}
-
-HRESULT sendCustomCommand(const IRigXPtr pRig, const char* command) {
-	int commandLength = strlen(command) / 2;
-	int responseOkLength = 6;
-
-	byte bCommand[11] = { 0 };
-	hex2byte(command, bCommand);
-
-	SAFEARRAYBOUND saBound;
-	saBound.lLbound = 0;
-	saBound.cElements = commandLength;
-
-	SAFEARRAY* psa = SafeArrayCreate(VARENUM::VT_UI1, 1, &saBound);
-	if (psa == nullptr)
-		exit(E_INTERNAL_SAFEARRAY_CREATE);
-
-	HRESULT hr = SafeArrayLock(psa);
-	if (FAILED(hr))
-		exit(E_INTERNAL_SAFEARRAY_LOCK);
-	psa->pvData = bCommand;
-	hr = SafeArrayUnlock(psa);
-	if (FAILED(hr))
-		exit(E_INTERNAL_SAFEARRAY_UNLOCK);
-	
-	VARIANT vtCommand;
-	vtCommand.vt = VT_ARRAY | VT_UI1;
-	vtCommand.parray = psa;
-	return pRig->SendCustomCommand(vtCommand, commandLength + responseOkLength , "");
-}
-
-
-int main()
+int main(int argc, char* argv[])
 { 
-	// Establish OmniRig COM connection
-	HRESULT hr = CoInitialize(nullptr);
-	if (FAILED(hr)) 
-		exit(E_OMNIRIG_COM_INIT);
-
-	IOmniRigX* pOmniRigX = nullptr;
-
-	hr = CoCreateInstance(
-		__uuidof(OmniRigX),
-		nullptr,
-		CLSCTX_LOCAL_SERVER,
-		__uuidof(IOmniRigX),
-		reinterpret_cast<void**>(&pOmniRigX)
-
-	);
-	if (FAILED(hr))
-		exit(E_OMNIRIG_COM_CREATE);
-
-	// Display OmniRig Version
-	printf("OmniRig Software Version:  %d.%d\n", HIWORD(pOmniRigX->GetSoftwareVersion()), LOWORD(pOmniRigX->GetSoftwareVersion()));
-	printf("OmniRig Interface Version: %d.%d\n", HIBYTE(pOmniRigX->GetInterfaceVersion()), LOBYTE(pOmniRigX->GetInterfaceVersion()));
-
-	// Display Rig Status
-	IRigXPtr pRig1 = pOmniRigX->GetRig1();
-	printf("Rig 1\n");
-	printf("    Rig Type: %s\n", _com_util::ConvertBSTRToString(pRig1->GetRigType()));
-	printf("    Status:   %s\n", _com_util::ConvertBSTRToString(pRig1->GetStatusStr()));
-	IRigXPtr pRig2 = pOmniRigX->GetRig2();
-	printf("Rig 2\n");
-	printf("    Rig Type: %s\n", _com_util::ConvertBSTRToString(pRig2->GetRigType()));
-	printf("    Status:   %s\n", _com_util::ConvertBSTRToString(pRig2->GetStatusStr()));
-#if OMNI_RIG_VERSION == 2
-	IRigXPtr pRig3 = pOmniRigX->GetRig3();
-	printf("Rig 3\n");
-	printf("    Rig Type: %s\n", _com_util::ConvertBSTRToString(pRig3->GetRigType()));
-	printf("    Status:   %s\n", _com_util::ConvertBSTRToString(pRig3->GetStatusStr()));
-	IRigXPtr pRig4 = pOmniRigX->GetRig4();
-	printf("Rig 4\n");
-	printf("    Rig Type: %s\n", _com_util::ConvertBSTRToString(pRig4->GetRigType()));
-	printf("    Status:   %s\n", _com_util::ConvertBSTRToString(pRig4->GetStatusStr()));
-#endif
-
-	IRigXPtr pRig = pOmniRigX->GetRig1();
-	RigStatusX rigStatus = pRig->GetStatus();
-	switch (rigStatus) {
-	    case ST_NOTCONFIGURED:
-			exit(E_OMNIRIG_STATUS_NOTCONFIGURED);
-		case ST_DISABLED:
-			exit(E_OMNIRIG_STATUS_DISABLED);
-		case ST_PORTBUSY:
-			exit(E_OMNIRIG_STATUS_PORTBUSY);
-		case ST_NOTRESPONDING:
-			exit(E_OMNIRIG_STATUS_NOTRESPONDING);
-		case ST_ONLINE:
+	ProgramOptions options(argc, argv);
+	OmniRigBase* omnirig;
+	switch (options.getOmnirigVersion()) {
+		case OmniRigVersion::OmniRigVersion1:
+			omnirig = new OmniRigV1(options);
+			break;
+		case OmniRigVersion::OmniRigVersion2:
+			omnirig = new OmniRigV2(options);
 			break;
 		default:
-			exit(E_OMNIRIG_STATUS_UNKNOWN);
+			exit(E_OPTION_OMNIRIG_VERSION);
 	}
-	
-	// hack to let omnirig connect with radio
-	Sleep(100);
-	
-	long frequency = pRig->GetFreqA();
-    std::cout << "Frequency A: " << frequency << "\n";
+
 	
 	SYSTEMTIME st, lt;
 
@@ -203,17 +88,9 @@ int main()
 	}
 	std::cout << "Offset: " << offsetData << "\n";
 
-	sendCustomCommand(pRig, "FEFE94E01A0500951111FD");
+	HRESULT hr = omnirig->sendCustomCommand("FEFE94E01A0500951111FD");
 	if (FAILED(hr))
 		exit(E_INTERNAL_OMNIRIG_CUSTOMCOMMAND);
-
-	
-	frequency = pRig->GetFreqA();
-	std::cout << "Frequency A: " << frequency << "\n";
-
-	// Terminate OmniRig COM connection
-	pOmniRigX->Release();
-	CoUninitialize();
 
 	std::cout << "Done\n";
 	exit(E_SUCCESS);
