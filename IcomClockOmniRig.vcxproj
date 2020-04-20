@@ -139,9 +139,19 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\ExitCodes.h" />
+    <ClInclude Include="src\OmniRigBase.h" />
+    <ClInclude Include="src\OmniRigV1.h" />
+    <ClInclude Include="src\OmniRigV2.h" />
+    <ClInclude Include="src\ProgramOptions.h" />
+    <ClInclude Include="src\Utilities.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\OmniRigBase.cpp" />
+    <ClCompile Include="src\OmniRigV1.cpp" />
+    <ClCompile Include="src\OmniRigV2.cpp" />
+    <ClCompile Include="src\ProgramOptions.cpp" />
+    <ClCompile Include="src\Utilities.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -18,23 +18,13 @@
 
 #pragma once
 
-#define E_SUCCESS 0
+#include <iostream>
+#include <wtypes.h>
 
-#define E_OPTION_RIG_NUMBER -1
-#define E_OPTION_TRANSCEIVER_NUMBER -2
-#define E_OPTION_OMNIRIG_VERSION -3
-
-#define E_OMNIRIG_COM_INIT -10
-#define E_OMNIRIG_COM_CREATE -11
-
-#define E_OMNIRIG_STATUS_NOTCONFIGURED 50
-#define E_OMNIRIG_STATUS_DISABLED 51
-#define E_OMNIRIG_STATUS_PORTBUSY 52
-#define E_OMNIRIG_STATUS_NOTRESPONDING 53
-#define E_OMNIRIG_STATUS_UNKNOWN 54
-
-#define E_INTERNAL_OMNIRIG_CUSTOMCOMMAND 500
-
-#define E_INTERNAL_SAFEARRAY_CREATE 1011
-#define E_INTERNAL_SAFEARRAY_LOCK 1012
-#define E_INTERNAL_SAFEARRAY_UNLOCK 1013
+class Utilities {
+public:
+	static void hex2byte(const char* src, byte* target);
+	static byte char2byte(char input);
+private:
+	Utilities() {}   // Disallow instantiation
+};

@@ -16,25 +16,26 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#pragma once
+#include "Utilities.h"
 
-#define E_SUCCESS 0
+byte Utilities::char2byte(char input)
+{
+	if (input >= '0' && input <= '9')
+		return input - '0';
+	if (input >= 'A' && input <= 'F')
+		return input - 'A' + 10;
+	if (input >= 'a' && input <= 'f')
+		return input - 'a' + 10;
+	throw std::invalid_argument("Invalid input string");
+}
 
-#define E_OPTION_RIG_NUMBER -1
-#define E_OPTION_TRANSCEIVER_NUMBER -2
-#define E_OPTION_OMNIRIG_VERSION -3
-
-#define E_OMNIRIG_COM_INIT -10
-#define E_OMNIRIG_COM_CREATE -11
-
-#define E_OMNIRIG_STATUS_NOTCONFIGURED 50
-#define E_OMNIRIG_STATUS_DISABLED 51
-#define E_OMNIRIG_STATUS_PORTBUSY 52
-#define E_OMNIRIG_STATUS_NOTRESPONDING 53
-#define E_OMNIRIG_STATUS_UNKNOWN 54
-
-#define E_INTERNAL_OMNIRIG_CUSTOMCOMMAND 500
-
-#define E_INTERNAL_SAFEARRAY_CREATE 1011
-#define E_INTERNAL_SAFEARRAY_LOCK 1012
-#define E_INTERNAL_SAFEARRAY_UNLOCK 1013
+// This function assumes src to be a zero terminated sanitized string with
+// an even number of [0-9a-f] characters, and target to be sufficiently large
+void Utilities::hex2byte(const char* src, byte* target)
+{
+	while (*src && src[1])
+	{
+		*(target++) = char2byte(*src) * 16 + char2byte(src[1]);
+		src += 2;
+	}
+}
