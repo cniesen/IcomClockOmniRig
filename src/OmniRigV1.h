@@ -24,9 +24,9 @@
 
 class OmniRigV1 : public OmniRigBase {
 public:
-	OmniRigV1(ProgramOptions options);
+	OmniRigV1(ProgramOptions &options);
 	virtual ~OmniRigV1();
-	HRESULT sendCustomCommand(const char* command);
+	HRESULT sendCustomCommand(const std::string command);
 private:
 	OmniRig1::IOmniRigX* pOmniRigX = nullptr;
 	OmniRig1::IRigXPtr pRig = nullptr;

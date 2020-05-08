@@ -47,3 +47,9 @@ bool Utilities::isDigit(const char* digit) {
 bool Utilities::isHex(const char* hex) {
 	return std::regex_match(std::string(hex), std::regex("[a-fA-F0-9]{2}"));
 }
+
+std::string Utilities::zeroPad(const WORD number, const int length) {
+	std::ostringstream ss;
+	ss << std::setw(length) << std::setfill('0') << number;
+	return ss.str();
+}
