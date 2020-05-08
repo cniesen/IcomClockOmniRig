@@ -6,11 +6,7 @@ The application is written in C++ with Visual Studio.
 
 **Current status:** Beginning of development
 
-Connection to OmniRig's Component Object Model is successful.  The predefined calls like getting the frequency works.  
-However, I still haven't had success sending custom commands.  I also don't have a clue how to receive the custom replies from OmniRig.
-Somehow I need to register an event handler for this.
-
-Any help to advance this project is greatly appreciated.
+Connection to OmniRig's Component Object Model is successful.  Time, date and offset are set.  Need to do more testing.  Especially OmniRig2 support needs to be tested.
 
 
 License
