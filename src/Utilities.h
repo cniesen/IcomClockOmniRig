@@ -18,8 +18,10 @@
 
 #pragma once
 
+#include <iomanip>
 #include <iostream>
 #include <regex>
+#include <sstream>
 #include <wtypes.h>
 
 class Utilities {
@@ -28,6 +30,7 @@ public:
 	static byte char2byte(char input);
 	static bool isDigit(const char* digit);
 	static bool isHex(const char* hex);
+	static std::string zeroPad(const WORD number, const int length);
 private:
 	Utilities() {}   // Disallow instantiation
 };

@@ -33,13 +33,19 @@ public:
 	bool isReversedTimeZone();
 	int getRigNumber();
 	std::string getTranceiverAddress();
+	std::string getControllerAddress();
+    std::string getTranceiverModel();
 	OmniRigVersion getOmnirigVersion();
 	bool isQuiet();
 private:
 	bool reversedTimeZone = false;
 	int rigNumber = 1;
 	std::string tranceiverAddress = "94";
+	std::string controllerAddress = "E0";
+	std::string tranceiverModel = "7300";
 	OmniRigVersion omnirigVersion = OmniRigVersion::OmniRigVersion1;
 	bool quiet = false;
+	void printProgramInfo();
 	void printHelp(std::string programName);
+	void printOptions();
 };

@@ -19,6 +19,8 @@
 #include "ProgramOptions.h"
 
 ProgramOptions::ProgramOptions(int argc, char* argv[]) {
+	printProgramInfo();
+
 	for (int i = 1; i < argc; ++i) {
 		std::string arg = argv[i];
 		if (arg == "-h") {
@@ -94,12 +96,22 @@ ProgramOptions::ProgramOptions(int argc, char* argv[]) {
 	default:
 		exit(E_OPTION_OMNIRIG_VERSION);
 	}
+	printOptions();
+}
+
+void ProgramOptions::printProgramInfo() {
+	std::cout
+		<< " ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
+		<< " ::                                                                          ::\n"
+		<< " ::   IcomClockOmniRig 1.0  -  https://github.com/cniesen/IcomClockOmniRig   ::\n"
+		<< " ::                                                                          ::\n"
+		<< " ::    A program to set the Icom tranceiver clock to your computer's time    ::\n"
+		<< " ::                                                                          ::\n"
+		<< " ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n\n";
 }
 
 void ProgramOptions::printHelp(std::string programName) {
 	std::cout 
-		<< "IcomClockOmniRig version 1.0 - set the Icom clock to your computer's clock\n"
-		<< "\thttps://github.com/cniesen/IcomClockOmniRig\n\n"
 		<< "Usage: " << programName.substr(programName.find_last_of("/\\") + 1) << " [options]\n"
 		<< "Options:\n"
 		<< "\t-u\t\tReverse local and UTC time (show UTC as clock and local time as on UTC display)\n\n"
@@ -110,6 +122,15 @@ void ProgramOptions::printHelp(std::string programName) {
 		<< "\t\t\t2 = updated OmniRig by HB9RYZ\n\n"
 		<< "\t-q\t\tQuiet, don't output messages\n\n"
 		<< "\t-h\t\tShow this help message\n\n";
+}
+
+void ProgramOptions::printOptions() {
+	std::cout << "Program Options:\n"
+		<< "    Using OmniRig version: " << ((omnirigVersion == OmniRigVersion::OmniRigVersion2) ? "2 (by HB9RYZ)" : "1 (by VE3NEA)") << "\n"
+		<< "    Using OmniRig rig: " << rigNumber << "\n"
+		<< "    Using Icom tranceiver address: " << tranceiverAddress << "\n"
+		<< "    Reverse clock and UTC time: " << (reversedTimeZone ? "yes" : "no") << "\n\n";
+	
 }
 
 bool ProgramOptions::isReversedTimeZone()
@@ -123,6 +144,14 @@ int ProgramOptions::getRigNumber() {
 
 std::string ProgramOptions::getTranceiverAddress() {
 	return tranceiverAddress;
+}
+
+std::string ProgramOptions::getControllerAddress() {
+	return controllerAddress;
+}
+
+std::string ProgramOptions::getTranceiverModel() {
+	return tranceiverModel;
 }
 
 OmniRigVersion ProgramOptions::getOmnirigVersion() {

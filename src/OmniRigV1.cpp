@@ -18,7 +18,7 @@
 
 #include "OmniRigV1.h"
 
-OmniRigV1::OmniRigV1(ProgramOptions options) {
+OmniRigV1::OmniRigV1(ProgramOptions &options) : OmniRigBase(options) {
 	// Establish OmniRig COM connection
 	HRESULT hr = CoInitialize(nullptr);
 	if (FAILED(hr))
@@ -88,15 +88,17 @@ void OmniRigV1::displayRigInfo(OmniRig1::IOmniRigX* pOmniRigX) {
 	OmniRig1::IRigXPtr pRig2 = pOmniRigX->GetRig2();
 	printf("Rig 2\n");
 	printf("    Rig Type: %s\n", _com_util::ConvertBSTRToString(pRig2->GetRigType()));
-	printf("    Status:   %s\n", _com_util::ConvertBSTRToString(pRig2->GetStatusStr()));
+	printf("    Status:   %s\n\n", _com_util::ConvertBSTRToString(pRig2->GetStatusStr()));
 }
 
-HRESULT OmniRigV1::sendCustomCommand(const char* command) {
-	int commandLength = strlen(command) / 2;
+HRESULT OmniRigV1::sendCustomCommand(const std::string command) {
+	OmniRigBase::sendCustomCommand(command);
+
+	int commandLength = command.length() / 2;
 	int responseOkLength = 6;
 
 	byte bCommand[11] = { 0 };
-	Utilities::hex2byte(command, bCommand);
+	Utilities::hex2byte(command.c_str(), bCommand);
 
 	SAFEARRAYBOUND saBound;
 	saBound.lLbound = 0;
@@ -117,5 +119,6 @@ HRESULT OmniRigV1::sendCustomCommand(const char* command) {
 	VARIANT vtCommand;
 	vtCommand.vt = VT_ARRAY | VT_UI1;
 	vtCommand.parray = psa;
+
 	return pRig->SendCustomCommand(vtCommand, commandLength + responseOkLength, "");
 }

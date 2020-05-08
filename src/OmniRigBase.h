@@ -18,6 +18,7 @@
 
 #pragma once
 
+#include <map>
 #include <wtypes.h>
 #include "ExitCodes.h"
 #include "ProgramOptions.h"
@@ -26,7 +27,19 @@
 class OmniRigBase {
 public:
 	OmniRigBase();
-	OmniRigBase(ProgramOptions options);
+	OmniRigBase(ProgramOptions &options);
 	virtual ~OmniRigBase();
-	virtual HRESULT sendCustomCommand(const char* command);
+	virtual HRESULT sendCustomCommand(const std::string command);
+	void setTime(const SYSTEMTIME currentDatetime);
+	void setDate(const SYSTEMTIME currentDatetime);
+	void setUtcOffset();
+private:
+	ProgramOptions* options = nullptr;
+	std::string lookupCommand(std::string command, std::string data);
+	const std::string preamble = "FEFE";
+	const std::map<std::string, std::map<std::string, std::string>> commands = {
+		{"7100", {{"setDateCommand", "1A050120"}, {"setTimeCommand", "1A050121"}, {"setUtcOffsetCommand", "1A050123"}}},
+		{"7300", {{"setDateCommand", "1A050094"}, {"setTimeCommand", "1A050095"}, {"setUtcOffsetCommand", "1A050096"}}}
+	};
+	const std::string postamble = "FD";
 };

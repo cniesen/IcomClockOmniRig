@@ -16,29 +16,11 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <sstream>
 #include <time.h>
 #include "ExitCodes.h"
 #include "OmniRigV1.h"
 #include "OmniRigV2.h"
 #include "ProgramOptions.h"
-
-int offset(const SYSTEMTIME& utc, const SYSTEMTIME& local) {
-	FILETIME uft, lft;
-
-	SystemTimeToFileTime(&utc, &uft);
-	SystemTimeToFileTime(&local, &lft);
-
-	return ULARGE_INTEGER{ lft.dwLowDateTime, lft.dwHighDateTime }.QuadPart - ULARGE_INTEGER{ uft.dwLowDateTime, uft.dwHighDateTime }.QuadPart;
-}
-
-template<class T>
-std::string toString(const T& value) {
-	std::ostringstream os;
-	os << value;
-	return os.str();
-}
-
 
 int main(int argc, char* argv[])
 { 
@@ -55,43 +37,24 @@ int main(int argc, char* argv[])
 			exit(E_OPTION_OMNIRIG_VERSION);
 	}
 
-	
-	SYSTEMTIME st, lt;
-
-	GetSystemTime(&st);
-	GetLocalTime(&lt);
-
-	printf("The system time is: %04d-%02d-%02d %02d:%02d:%02d\n", st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond);
-	printf(" The local time is: %04d-%02d-%02d %02d:%02d:%02d\n", lt.wYear, lt.wMonth, lt.wDay, lt.wHour, lt.wMinute, lt.wSecond);
-
-	
-	TIME_ZONE_INFORMATION timeZoneInformation;
-	GetTimeZoneInformation(&timeZoneInformation);
-	long offset = timeZoneInformation.Bias + timeZoneInformation.DaylightBias;
-	std::string offsetData = "";
-	
-
-	if (offset < 0) {
-		offset = offset * -1;
-		long hours = offset / 60;
-		long minutes = offset % 60;
-		offsetData += std::string(2 - toString(hours).length(), '0') + toString(hours);
-		offsetData += std::string(2 - toString(minutes).length(), '0') + toString(minutes);
-		offsetData += "00";
+	auto pGetTime = GetLocalTime;
+	if (options.isReversedTimeZone()) {
+		pGetTime = GetSystemTime;
 	}
-	else {
-		long hours = offset / 60;
-		long minutes = offset % 60;
-		offsetData += std::string(2 - toString(hours).length(), '0') + toString(hours);
-		offsetData += std::string(2 - toString(minutes).length(), '0') + toString(minutes);
-		offsetData += "01";
+	
+	if (!options.isQuiet()) {
+		std::cout << "Waiting for the full minute to set the time" << std::endl;
 	}
-	std::cout << "Offset: " << offsetData << "\n";
+	SYSTEMTIME currentDatetime;
+	pGetTime(&currentDatetime);
+	while (currentDatetime.wSecond != 0) {
+		Sleep(100);
+		pGetTime(&currentDatetime);
+	} 
 
-	HRESULT hr = omnirig->sendCustomCommand("FEFE94E01A0500951111FD");
-	if (FAILED(hr))
-		exit(E_INTERNAL_OMNIRIG_CUSTOMCOMMAND);
+	omnirig->setTime(currentDatetime);
+	omnirig->setDate(currentDatetime);
+	omnirig->setUtcOffset();
 
-	std::cout << "Done\n";
 	exit(E_SUCCESS);
 }
