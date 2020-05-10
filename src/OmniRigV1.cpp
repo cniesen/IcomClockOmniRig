@@ -97,7 +97,7 @@ HRESULT OmniRigV1::sendCustomCommand(const std::string command) {
 	int commandLength = command.length() / 2;
 	int responseOkLength = 6;
 
-	byte bCommand[11] = { 0 };
+	byte bCommand[20] = { 0 };
 	Utilities::hex2byte(command.c_str(), bCommand);
 
 	SAFEARRAYBOUND saBound;
