@@ -2,7 +2,7 @@ IcomClockOmniRig
 ================
 Windows command line program for setting the internal clock of the Icom IC-7300 or IC-7100 via OmniRig.
 
-Download the latest Windows 64bit executable at https://github.com/cniesen/morsetrainer/releases/latest . 
+Download the latest Windows 64bit executable at https://github.com/cniesen/IcomClockOmniRig/releases/latest . 
 
 
 Program Options
