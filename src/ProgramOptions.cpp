@@ -19,8 +19,6 @@
 #include "ProgramOptions.h"
 
 ProgramOptions::ProgramOptions(int argc, char* argv[]) {
-	printProgramInfo();
-
 	for (int i = 1; i < argc; ++i) {
 		std::string arg = argv[i];
 		if (arg == "-h") {
@@ -109,7 +107,11 @@ ProgramOptions::ProgramOptions(int argc, char* argv[]) {
 	default:
 		exit(E_OPTION_OMNIRIG_VERSION);
 	}
-	printOptions();
+	if (!isQuiet()) {
+		printProgramInfo();
+		printOptions();
+	}
+
 }
 
 void ProgramOptions::printProgramInfo() {
@@ -124,7 +126,8 @@ void ProgramOptions::printProgramInfo() {
 }
 
 void ProgramOptions::printHelp(std::string programName) {
-	std::cout 
+	printProgramInfo();
+	std::cout
 		<< "Usage: " << programName.substr(programName.find_last_of("/\\") + 1) << " [options]\n"
 		<< "Options:\n"
 		<< "\t-u\t\tReverse local and UTC time (show UTC as clock and local time as on UTC display)\n\n"

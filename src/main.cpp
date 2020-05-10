@@ -42,9 +42,7 @@ int main(int argc, char* argv[])
 		pGetTime = GetSystemTime;
 	}
 	
-	if (!options.isQuiet()) {
-		std::cout << "Waiting for the full minute to set the time" << std::endl;
-	}
+    std::cout << "Waiting for the full minute to set the time" << std::endl;
 	SYSTEMTIME currentDatetime;
 	pGetTime(&currentDatetime);
 	while (currentDatetime.wSecond != 0) {
