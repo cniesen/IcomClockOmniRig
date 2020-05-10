@@ -42,6 +42,10 @@ Notes
 -----
 * OmniRig needs to be installed in the default directory.  For OmniRig by VE3NEA this is in "C:\Program Files (x86)\Afreet\OmniRig\OmniRig.exe" and for OmniRig 2 by HB9RYZ this is in "C:\Program Files (x86)\Omni-Rig V2\omnirig2.exe".
 
+* If you encounter the following error
+"The program can't start because VCRUNTIME140_1.dll is missing from your computer.  Try reinstalling the program to fix this problem." download and install the Microsoft Visual C++ Redistributable (vc_redist.x86.exe or vr_redist.x64.exe) from 
+https://support.microsoft.com/en-gb/help/2977003/the-latest-supported-visual-c-downloads .
+
 * Since the seconds of the Icom clock can't be set directly, the program needs to wait until the full minute in order to set the time.  This means that the program might need up to one minute to run.
 
 * Adding support for other Icom transceivers should be easy, although many of them support NTP (Network Time Protocol). Create an "Issue" if you needs support for your rig.
