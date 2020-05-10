@@ -18,7 +18,6 @@
 
 #pragma once
 
-#include <map>
 #include <wtypes.h>
 #include "ExitCodes.h"
 #include "ProgramOptions.h"
@@ -35,11 +34,4 @@ public:
 	void setUtcOffset();
 private:
 	ProgramOptions* options = nullptr;
-	std::string lookupCommand(std::string command, std::string data);
-	const std::string preamble = "FEFE";
-	const std::map<std::string, std::map<std::string, std::string>> commands = {
-		{"7100", {{"setDateCommand", "1A050120"}, {"setTimeCommand", "1A050121"}, {"setUtcOffsetCommand", "1A050123"}}},
-		{"7300", {{"setDateCommand", "1A050094"}, {"setTimeCommand", "1A050095"}, {"setUtcOffsetCommand", "1A050096"}}}
-	};
-	const std::string postamble = "FD";
 };

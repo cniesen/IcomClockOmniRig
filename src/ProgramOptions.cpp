@@ -41,24 +41,37 @@ ProgramOptions::ProgramOptions(int argc, char* argv[]) {
 				printHelp(argv[0]);
 				exit(E_OPTION_RIG_NUMBER);
 			}
+		} else if (arg == "-m") {
+			if (++i >= argc) {
+				std::cout << "ERROR: No Icom transceiver model specified\n\n";
+				printHelp(argv[0]);
+				exit(E_OPTION_TRANSCEIVER_MODEL);
+			}
+			if (isValidTransceiverModel(argv[i])) {
+				transceiverModel = argv[i];
+			} else {
+				std::cout << "ERROR: Invalid Icom transceiver model specified: " << argv[i] << "\n\n";
+				printHelp(argv[0]);
+				exit(E_OPTION_TRANSCEIVER_MODEL);
+			}
 		} else if (arg == "-a") {
 			if (++i >= argc) {
-				std::cout << "ERROR: No Icom tranceiver address specified\n\n";
+				std::cout << "ERROR: No Icom transceiver address specified\n\n";
 				printHelp(argv[0]);
-				exit(E_OPTION_RIG_NUMBER);
+				exit(E_OPTION_TRANSCEIVER_ADDRESS);
 			}
 			if (Utilities::isHex(argv[i])) {
 				tranceiverAddress = argv[i];
 			} else {
-				std::cout << "ERROR: Invalid Icom tranceiver address specified: " << argv[i] << "\n\n";
+				std::cout << "ERROR: Invalid Icom transceiver address specified: " << argv[i] << "\n\n";
 				printHelp(argv[0]);
-				exit(E_OPTION_RIG_NUMBER);
+				exit(E_OPTION_TRANSCEIVER_ADDRESS);
 			}
 		} else if (arg == "-o") {
 			if (++i >= argc) {
 				std::cout << "ERROR: No OmniRig version specified\n\n";
 				printHelp(argv[0]);
-				exit(E_OPTION_RIG_NUMBER);
+				exit(E_OPTION_OMNIRIG_VERSION);
 			}
 			if (std::string(argv[i]) == "1") {
 				omnirigVersion = OmniRigVersion::OmniRigVersion1;
@@ -67,7 +80,7 @@ ProgramOptions::ProgramOptions(int argc, char* argv[]) {
 			} else {
 				std::cout << "ERROR: Invalid OmniRig version specified: " << argv[i] << "\n\n";
 				printHelp(argv[0]);
-				exit(E_OPTION_RIG_NUMBER);
+				exit(E_OPTION_OMNIRIG_VERSION);
 			}
 		} else if (arg == "-q") {
 			quiet = true;
@@ -116,9 +129,11 @@ void ProgramOptions::printHelp(std::string programName) {
 		<< "Options:\n"
 		<< "\t-u\t\tReverse local and UTC time (show UTC as clock and local time as on UTC display)\n\n"
 		<< "\t-r <number>\tThe selected rig in OmniRig (default: 1)\n\n"
-		<< "\t-a <hex>\tThe Icom tranceiver address (default: 94)\n\n"
-		<< "\t-o <number>\tOmniRig version number (default: 1)\n\n"
-		<< "\t\t\t1 = original OmniRig by VE3NEA\n\n"
+		<< "\t-m <model>\tThe Icom transceiver model (default: IC-7300)\n"
+		<< "\t\t\tValid models: " << listValidTransceiverModels() << "\n\n"
+		<< "\t-a <hex>\tThe Icom transceiver address (default: 94)\n\n"
+		<< "\t-o <number>\tOmniRig version number (default: 1)\n"
+		<< "\t\t\t1 = original OmniRig by VE3NEA\n"
 		<< "\t\t\t2 = updated OmniRig by HB9RYZ\n\n"
 		<< "\t-q\t\tQuiet, don't output messages\n\n"
 		<< "\t-h\t\tShow this help message\n\n";
@@ -128,7 +143,8 @@ void ProgramOptions::printOptions() {
 	std::cout << "Program Options:\n"
 		<< "    Using OmniRig version: " << ((omnirigVersion == OmniRigVersion::OmniRigVersion2) ? "2 (by HB9RYZ)" : "1 (by VE3NEA)") << "\n"
 		<< "    Using OmniRig rig: " << rigNumber << "\n"
-		<< "    Using Icom tranceiver address: " << tranceiverAddress << "\n"
+		<< "    Using Icom transceiver model: " << transceiverModel << "\n"
+	    << "    Using Icom transceiver address: " << tranceiverAddress << "\n"
 		<< "    Reverse clock and UTC time: " << (reversedTimeZone ? "yes" : "no") << "\n\n";
 	
 }
@@ -150,8 +166,8 @@ std::string ProgramOptions::getControllerAddress() {
 	return controllerAddress;
 }
 
-std::string ProgramOptions::getTranceiverModel() {
-	return tranceiverModel;
+std::string ProgramOptions::getTransceiverModel() {
+	return transceiverModel;
 }
 
 OmniRigVersion ProgramOptions::getOmnirigVersion() {
@@ -160,4 +176,36 @@ OmniRigVersion ProgramOptions::getOmnirigVersion() {
 
 bool ProgramOptions::isQuiet() {
 	return quiet;
+}
+
+bool ProgramOptions::isValidTransceiverModel(std::string transceiverModel) {
+	auto transceiverCommands = commands.find(transceiverModel);
+		if (transceiverCommands == commands.end()) {
+			return false;
+		} else {
+			return true;
+		}
+}
+
+std::string ProgramOptions::listValidTransceiverModels() {
+    std::string transceiverModels = "";
+	for (const auto& command : commands) {
+		if (!transceiverModels.empty()) {
+			transceiverModels.append(", ");
+		}
+		transceiverModels.append(command.first);
+	}
+	return transceiverModels;
+}
+
+std::string ProgramOptions::lookupCommand(const std::string command, const std::string data) {
+	auto transceiverCommands = commands.find(getTransceiverModel());
+	if (transceiverCommands == commands.end()) {
+		exit(E_INTERNAL_COMMAND_MAP_TRANSCEIVER);
+	}
+	auto transceiverCommand = transceiverCommands->second.find(command);
+	if (transceiverCommand == transceiverCommands->second.end()) {
+		exit(E_INTERNAL_COMMAND_MAP_COMMAND);
+	}
+	return preamble + getTranceiverAddress() + getControllerAddress() + transceiverCommand->second + data + postamble;
 }

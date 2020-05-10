@@ -30,18 +30,6 @@ OmniRigBase::~OmniRigBase()
 {
 }
 
-std::string OmniRigBase::lookupCommand(const std::string command, const std::string data) {
-	auto transceiverCommands = commands.find(options->getTranceiverModel());
-	if (transceiverCommands == commands.end()) {
-		exit(E_INTERNAL_COMMAND_MAP_TRANSCEIVER);
-	}
-	auto transceiverCommand = transceiverCommands->second.find(command);
-	if (transceiverCommand == transceiverCommands->second.end()) {
-		exit(E_INTERNAL_COMMAND_MAP_COMMAND);
-	}
-	return preamble + options->getTranceiverAddress() + options->getControllerAddress() + transceiverCommand->second + data + postamble;
-}
-
 HRESULT OmniRigBase::sendCustomCommand(const std::string command)
 {
     std::cout << "Sending command: " << command << std::endl;
@@ -50,14 +38,14 @@ HRESULT OmniRigBase::sendCustomCommand(const std::string command)
 
 void OmniRigBase::setTime(const SYSTEMTIME currentDatetime) {
 	std::string timeData = Utilities::zeroPad(currentDatetime.wHour, 2) + Utilities::zeroPad(currentDatetime.wMinute, 2);
-	HRESULT hr = sendCustomCommand(lookupCommand("setTimeCommand", timeData));
+	HRESULT hr = sendCustomCommand(options->lookupCommand("setTimeCommand", timeData));
 	if (FAILED(hr))
 		exit(E_INTERNAL_OMNIRIG_SET_TIME);
 }
 
 void OmniRigBase::setDate(const SYSTEMTIME currentDatetime) {
 	std::string dateData = Utilities::zeroPad(currentDatetime.wYear, 4) + Utilities::zeroPad(currentDatetime.wMonth, 2) + Utilities::zeroPad(currentDatetime.wDay, 2);
-	HRESULT hr = sendCustomCommand(lookupCommand("setDateCommand", dateData));
+	HRESULT hr = sendCustomCommand(options->lookupCommand("setDateCommand", dateData));
 	if (FAILED(hr))
 		exit(E_INTERNAL_OMNIRIG_SET_DATE);
 }
@@ -94,7 +82,7 @@ void OmniRigBase::setUtcOffset() {
 		}
 	}
 
-	HRESULT hr = sendCustomCommand(lookupCommand("setUtcOffsetCommand", offsetData));
+	HRESULT hr = sendCustomCommand(options->lookupCommand("setUtcOffsetCommand", offsetData));
 	if (FAILED(hr))
 		exit(E_INTERNAL_OMNIRIG_SET_OFFSET);
 }

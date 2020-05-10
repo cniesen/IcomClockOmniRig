@@ -19,6 +19,7 @@
 #pragma once
 
 #include <iostream>
+#include <map>
 #include "ExitCodes.h"
 #include "Utilities.h"
 
@@ -34,18 +35,27 @@ public:
 	int getRigNumber();
 	std::string getTranceiverAddress();
 	std::string getControllerAddress();
-    std::string getTranceiverModel();
+    std::string getTransceiverModel();
 	OmniRigVersion getOmnirigVersion();
 	bool isQuiet();
+	std::string lookupCommand(std::string command, std::string data);
 private:
 	bool reversedTimeZone = false;
 	int rigNumber = 1;
 	std::string tranceiverAddress = "94";
 	std::string controllerAddress = "E0";
-	std::string tranceiverModel = "7300";
+	std::string transceiverModel = "IC-7300";
 	OmniRigVersion omnirigVersion = OmniRigVersion::OmniRigVersion1;
 	bool quiet = false;
 	void printProgramInfo();
 	void printHelp(std::string programName);
 	void printOptions();
+	bool isValidTransceiverModel(std::string transceiverModel);
+	std::string listValidTransceiverModels();
+	const std::string preamble = "FEFE";
+	const std::map<std::string, std::map<std::string, std::string>> commands = {
+		{"IC-7100", {{"setDateCommand", "1A050120"}, {"setTimeCommand", "1A050121"}, {"setUtcOffsetCommand", "1A050123"}}},
+		{"IC-7300", {{"setDateCommand", "1A050094"}, {"setTimeCommand", "1A050095"}, {"setUtcOffsetCommand", "1A050096"}}}
+	};
+	const std::string postamble = "FD";
 };
