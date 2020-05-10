@@ -32,8 +32,10 @@ OmniRigV1::OmniRigV1(ProgramOptions &options) : OmniRigBase(options) {
 		reinterpret_cast<void**>(&pOmniRigX)
 
 	);
-	if (FAILED(hr))
+	if (FAILED(hr)) {
+		std::cout << "ERROR: OmniRig not found";
 		exit(E_OMNIRIG_COM_CREATE);
+	}
 
 	if (!options.isQuiet()) {
 		displayOmniRigInfo(pOmniRigX);

@@ -46,6 +46,8 @@ Notes
 
 * Adding support for other Icom transceivers should be easy, although many of them support NTP (Network Time Protocol). Create an "Issue" if you needs support for your rig.
 
+* For trouble shooting type `echo Exit Code is %errorlevel%` after the program has just run to see the exit code.
+
 The application is written in C++ with Visual Studio.
 
 
