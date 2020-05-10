@@ -40,7 +40,6 @@ OmniRigV2::OmniRigV2(ProgramOptions &options) : OmniRigBase(options) {
 		displayRigInfo(pOmniRigX);
 	}
 
-
 	switch (options.getRigNumber()) {
 		case 1:
 			pRig = pOmniRigX->GetRig1();
@@ -61,16 +60,21 @@ OmniRigV2::OmniRigV2(ProgramOptions &options) : OmniRigBase(options) {
 	OmniRig2::RigStatusX rigStatus = pRig->GetStatus();
 	switch (rigStatus) {
 		case OmniRig2::ST_NOTCONFIGURED:
+			std::cout << "ERROR: OmniRig not configured";
 			exit(E_OMNIRIG_STATUS_NOTCONFIGURED);
 		case OmniRig2::ST_DISABLED:
+			std::cout << "ERROR: OmniRig reports disabled";
 			exit(E_OMNIRIG_STATUS_DISABLED);
 		case OmniRig2::ST_PORTBUSY:
+			std::cout << "ERROR: OmniRig reports COM port busy";
 			exit(E_OMNIRIG_STATUS_PORTBUSY);
 		case OmniRig2::ST_NOTRESPONDING:
+			std::cout << "ERROR: Transceiver does not respond to OmniRig commands";
 			exit(E_OMNIRIG_STATUS_NOTRESPONDING);
 		case OmniRig2::ST_ONLINE:
 			break;
 		default:
+			std::cout << "ERROR: Unknown OmniRig error";
 			exit(E_OMNIRIG_STATUS_UNKNOWN);
 	}
 }
