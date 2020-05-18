@@ -55,7 +55,8 @@ private:
 	const std::string preamble = "FEFE";
 	const std::map<std::string, std::map<std::string, std::string>> commands = {
 		{"IC-7100", {{"setDateCommand", "1A050120"}, {"setTimeCommand", "1A050121"}, {"setUtcOffsetCommand", "1A050123"}}},
-		{"IC-7300", {{"setDateCommand", "1A050094"}, {"setTimeCommand", "1A050095"}, {"setUtcOffsetCommand", "1A050096"}}}
+		{"IC-7300", {{"setDateCommand", "1A050094"}, {"setTimeCommand", "1A050095"}, {"setUtcOffsetCommand", "1A050096"}}},
+		{"IC-7610", {{"setDateCommand", "1A050158"}, {"setTimeCommand", "1A050159"}, {"setUtcOffsetCommand", "1A050162"}}}
 	};
 	const std::string postamble = "FD";
 };
