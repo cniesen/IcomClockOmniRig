@@ -16,3 +16,6 @@ jobs:
 
     - name: setup-msbuild
       uses: microsoft/setup-msbuild@v1
+    
+    - name: VSTest
+      run: vstest.console.exe IcomclockOmniRigTests\bin\debug\IcomClockOmniRigTests.dll
