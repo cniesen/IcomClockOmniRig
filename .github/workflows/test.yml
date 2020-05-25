@@ -22,9 +22,12 @@ jobs:
 
     - name: Restore nuget packages
       run: msbuild -t:restore
-      
+      working-directory: src
+            
     - name: Build source
       run: msbuild
-    
+      working-directory: src
+          
     - name: VSTest
       run: vstest.console.exe IcomclockOmniRigTests\bin\debug\IcomClockOmniRigTests.dll
+      working-directory: src
