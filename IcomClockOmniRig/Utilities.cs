@@ -52,5 +52,9 @@ namespace IcomClockOmniRig {
                 .Select(X => Convert.ToByte(hexString.Substring(X, 2), 16))
                 .ToArray();
         }
+
+        public static string ByteArrayToHexString(byte[] byteArray) {
+            return BitConverter.ToString(byteArray).Replace("-", string.Empty);
+        }
     }
 }

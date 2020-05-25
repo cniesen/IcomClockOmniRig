@@ -225,5 +225,9 @@ namespace IcomClockOmniRig {
 			return String.Join(", ", Transceivers.Keys);
 		}
 
+		public string ResponseOk() {
+			return "FEFE" + ControllerAddress + TransceiverAddress + "FBFD";
+		}
+
 	}
 }
