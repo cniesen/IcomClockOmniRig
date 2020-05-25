@@ -1,37 +1,31 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
-VisualStudioVersion = 16.0.29911.84
+VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IcomClockOmniRig", "IcomClockOmniRig.vcxproj", "{C199A420-40C3-40BE-B3E6-0DC7444EA582}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IcomClockOmniRig", "IcomClockOmniRig\IcomClockOmniRig.csproj", "{5B6651E0-41F7-4DF8-B4CE-7A18661EECC6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IcomClockOmniRigTests", "IcomClockOmniRigTests\IcomClockOmniRigTests.csproj", "{35ED5600-FCB1-4DA0-AD7F-D7591D89E92F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug (with -h)|x64 = Debug (with -h)|x64
-		Debug (with -h)|x86 = Debug (with -h)|x86
-		Debug|x64 = Debug|x64
-		Debug|x86 = Debug|x86
-		Release|x64 = Release|x64
-		Release|x86 = Release|x86
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{C199A420-40C3-40BE-B3E6-0DC7444EA582}.Debug (with -h)|x64.ActiveCfg = Debug (with -h)|x64
-		{C199A420-40C3-40BE-B3E6-0DC7444EA582}.Debug (with -h)|x64.Build.0 = Debug (with -h)|x64
-		{C199A420-40C3-40BE-B3E6-0DC7444EA582}.Debug (with -h)|x86.ActiveCfg = Debug (with -h)|Win32
-		{C199A420-40C3-40BE-B3E6-0DC7444EA582}.Debug (with -h)|x86.Build.0 = Debug (with -h)|Win32
-		{C199A420-40C3-40BE-B3E6-0DC7444EA582}.Debug|x64.ActiveCfg = Debug|x64
-		{C199A420-40C3-40BE-B3E6-0DC7444EA582}.Debug|x64.Build.0 = Debug|x64
-		{C199A420-40C3-40BE-B3E6-0DC7444EA582}.Debug|x86.ActiveCfg = Debug|Win32
-		{C199A420-40C3-40BE-B3E6-0DC7444EA582}.Debug|x86.Build.0 = Debug|Win32
-		{C199A420-40C3-40BE-B3E6-0DC7444EA582}.Release|x64.ActiveCfg = Release|x64
-		{C199A420-40C3-40BE-B3E6-0DC7444EA582}.Release|x64.Build.0 = Release|x64
-		{C199A420-40C3-40BE-B3E6-0DC7444EA582}.Release|x86.ActiveCfg = Release|Win32
-		{C199A420-40C3-40BE-B3E6-0DC7444EA582}.Release|x86.Build.0 = Release|Win32
+		{5B6651E0-41F7-4DF8-B4CE-7A18661EECC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B6651E0-41F7-4DF8-B4CE-7A18661EECC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B6651E0-41F7-4DF8-B4CE-7A18661EECC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B6651E0-41F7-4DF8-B4CE-7A18661EECC6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35ED5600-FCB1-4DA0-AD7F-D7591D89E92F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35ED5600-FCB1-4DA0-AD7F-D7591D89E92F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35ED5600-FCB1-4DA0-AD7F-D7591D89E92F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35ED5600-FCB1-4DA0-AD7F-D7591D89E92F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {EE584408-74D6-4A8E-BFEB-F92FFE540179}
+		SolutionGuid = {61536D38-8949-4345-B8AA-0A1BA78F5F7C}
 	EndGlobalSection
 EndGlobal
