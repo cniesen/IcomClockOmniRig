@@ -22,11 +22,12 @@ using System;
 namespace IcomClockOmniRig {
     class OmniRigV2 : OmniRigBase {
 
-        private readonly IOmniRigX OmniRig;
+        private readonly OmniRigX OmniRig;
         private IRigX Rig = null;
         
         public OmniRigV2(ProgramOptions programOptions) : base(programOptions) {
             OmniRig = new OmniRigX();
+            OmniRig.CustomReply += OmniRig_CustomReply;
         }
 
         protected override string SoftwareVersion() {
@@ -53,8 +54,10 @@ namespace IcomClockOmniRig {
         }
 
         protected override void SendCustomCommand(string command) {
-            Console.WriteLine("Sending command: " + command);
-            GetRig().SendCustomCommand(Utilities.HexStringToByteArray(command), 6, null);
+            Console.Write("Sending command: " + command);
+            byte[] byteCommand = Utilities.HexStringToByteArray(command);
+            GetRig().SendCustomCommand(byteCommand, byteCommand.Length + 6, null);
+
         }
 
         private IRigX GetRig() {

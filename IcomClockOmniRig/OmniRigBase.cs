@@ -24,6 +24,14 @@ namespace IcomClockOmniRig {
     abstract class OmniRigBase {
         protected readonly ProgramOptions programOptions;
 
+        private readonly int responseTimeout = 4000; //milliseconds
+        protected string timeCommand;
+        protected bool? timeOk = null;
+        protected string dateCommand;
+        protected bool? dateOk = null;
+        protected string offsetCommand;
+        protected bool? offsetOk = null;
+
         public OmniRigBase(ProgramOptions programOptions) {
             this.programOptions = programOptions;
         }
@@ -55,20 +63,63 @@ namespace IcomClockOmniRig {
                 currentDatetTime = CurrentDateTime();
             }
             string timeData = currentDatetTime.Hour.ToString("D2") + currentDatetTime.Minute.ToString("D2");
-            SendCustomCommand(programOptions.LookupCommand("setTimeCommand", timeData));
+            timeCommand = programOptions.LookupCommand("setTimeCommand", timeData);
+            SendCustomCommand(timeCommand);
+            int msPassed = 0;
+            while ((timeOk == null) && (msPassed < responseTimeout)) {
+                Sleep(50);
+                msPassed += 50;
+            }
+            if (!timeOk.HasValue) {
+                Console.WriteLine(" - Rig response: timed out");
+                throw new ExitException(ExitCode.OMNIRIG_SET_TIME_TIMEOUT, "Error: OmniRig did not respond when setting the time");
+            } else if (timeOk.Value) {
+                Console.WriteLine(" - Rig response: OK");
+            } else { 
+                Console.WriteLine(" - Rig response: Error");
+                throw new ExitException(ExitCode.OMNIRIG_SET_TIME_ERROR, "Error: OmniRig raised and error when setting the time");
+            }
         }
 
         public void SetDate() {
             DateTime currentDatetTime = CurrentDateTime();
             string dateData = currentDatetTime.Year.ToString("D4") + currentDatetTime.Month.ToString("D2") + currentDatetTime.Day.ToString("D2");
-            SendCustomCommand(programOptions.LookupCommand("setDateCommand", dateData));
-            
+            dateCommand = programOptions.LookupCommand("setDateCommand", dateData);
+            SendCustomCommand(dateCommand);
+            int msPassed = 0;
+            while ((timeOk == null) && (msPassed < responseTimeout)) {
+                Sleep(50);
+                msPassed += 50;
+            }
+            if (!timeOk.HasValue) {
+                Console.WriteLine(" - Rig response: timed out");
+                throw new ExitException(ExitCode.OMNIRIG_SET_TIME_TIMEOUT, "Error: OmniRig did not respond when setting the time");
+            } else if (!timeOk.Value) {
+                Console.WriteLine(" - Rig response: Error");
+                throw new ExitException(ExitCode.OMNIRIG_SET_TIME_ERROR, "Error: OmniRig raised and error when setting the time");
+            }
+
             // For the rare occasion that the date just switched between generating the date and setting it on the radio
             if (currentDatetTime.Day != CurrentDateTime().Day) {
                 currentDatetTime = CurrentDateTime();
                 dateData = currentDatetTime.Year.ToString("D4") + currentDatetTime.Month.ToString("D2") + currentDatetTime.Day.ToString("D2");
-                SendCustomCommand(programOptions.LookupCommand("setDateCommand", dateData));
+                dateCommand = programOptions.LookupCommand("setDateCommand", dateData);
+                SendCustomCommand(dateCommand);
+                msPassed = 0;
+                while ((timeOk == null) && (msPassed < responseTimeout)) {
+                    Sleep(50);
+                    msPassed += 50;
+                }
+                if (!timeOk.HasValue) {
+                    Console.WriteLine(" - Rig response: timed out");
+                    throw new ExitException(ExitCode.OMNIRIG_SET_TIME_TIMEOUT, "Error: OmniRig did not respond when setting the time");
+                } else if (!timeOk.Value) {
+                    Console.WriteLine(" - Rig response: Error");
+                    throw new ExitException(ExitCode.OMNIRIG_SET_TIME_ERROR, "Error: OmniRig raised and error when setting the time");
+                }
             }
+            Console.WriteLine(" - Rig response: OK");
+
         }
 
         public void SetOffset() {
@@ -79,7 +130,40 @@ namespace IcomClockOmniRig {
             } else {
                 offsetData = Abs(offset.Hours).ToString("D2") + offset.Minutes.ToString("D2") + "01";
             }
-            SendCustomCommand(programOptions.LookupCommand("setUtcOffsetCommand", offsetData));
+            offsetCommand = programOptions.LookupCommand("setUtcOffsetCommand", offsetData);
+            SendCustomCommand(offsetCommand);
+            int msPassed = 0;
+            while ((offsetOk == null) && (msPassed < responseTimeout)) {
+                Sleep(50);
+                msPassed += 50;
+            }
+            if (!offsetOk.HasValue) {
+                Console.WriteLine(" - Rig response: timed out");
+                throw new ExitException(ExitCode.OMNIRIG_SET_OFFSET_TIMEOUT, "Error: OmniRig did not respond when setting the utc offset");
+            } else if (offsetOk.Value) {
+                Console.WriteLine(" - Rig response: OK");
+            } else {
+                Console.WriteLine(" - Rig response: Error");
+                throw new ExitException(ExitCode.OMNIRIG_SET_OFFSET_ERROR, "Error: OmniRig raised and error when setting the utc offset");
+            }
+        }
+
+        //Omnirig CustomReply event
+        protected void OmniRig_CustomReply(int rigNumber, object command, object reply) {
+            if (rigNumber != programOptions.RigNumber) {
+                return;
+            }
+
+            string sCommand = Utilities.ByteArrayToHexString((byte[])command);
+            string sReply = Utilities.ByteArrayToHexString((byte[])reply);
+
+            if ((sCommand == timeCommand) && sReply.StartsWith(sCommand)) {
+                timeOk = (sCommand + programOptions.ResponseOk() == sReply);
+            } else if ((sCommand == dateCommand) && sReply.StartsWith(sCommand)) {
+                dateOk = (sCommand + programOptions.ResponseOk() == sReply);
+            } else if ((sCommand == offsetCommand) && sReply.StartsWith(sCommand)) {
+                offsetOk = (sCommand + programOptions.ResponseOk() == sReply);
+            }
         }
 
         protected abstract string SoftwareVersion();
