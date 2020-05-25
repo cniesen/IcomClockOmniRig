@@ -2,7 +2,7 @@ IcomClockOmniRig
 ================
 Windows command line program for setting the internal clock of the Icom IC-7300 or IC-7100 via OmniRig.
 
-Download the latest Windows 64bit executable at https://github.com/cniesen/IcomClockOmniRig/releases/latest . 
+Download the latest Windows executable at https://github.com/cniesen/IcomClockOmniRig/releases/latest . 
 
 
 Program Options
@@ -11,7 +11,7 @@ Program Options
 C:\>IcomClockOmniRig.exe -h
  ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
  ::                                                                          ::
- ::   IcomClockOmniRig 1.0  -  https://github.com/cniesen/IcomClockOmniRig   ::
+ ::   IcomClockOmniRig 2.0  -  https://github.com/cniesen/IcomClockOmniRig   ::
  ::                                                                          ::
  ::    A program to set the Icom tranceiver clock to your computer's time    ::
  ::                                                                          ::
@@ -28,6 +28,8 @@ Options:
 
         -a <hex>        The Icom transceiver address (default: 94)
 
+        -c <hex>        The controller address (default: E0)
+
         -o <number>     OmniRig version number (default: 1)
                         1 = original OmniRig by VE3NEA
                         2 = updated OmniRig by HB9RYZ
@@ -37,22 +39,30 @@ Options:
         -h              Show this help message
 ```
 
+Supported Transceivers
+----------------------
+
+| Transceiver  | Date Command | Time Command | UTC Offset Command | Transceiver Address | Tested with OmniRig | Tested with OmniRig 2 |
+|--------------|--------------|--------------|--------------------|---------------------|---------------------|-----------------------|
+| Icom IC-7100 | 1A050120     | 1A050121     | 1A050123           | 88                  |                     |                       | 
+| Icom IC-7300 | 1A050094     | 1A050095     | 1A050096           | 94                  |                     |                       |
+| Icom IC-7610 | 1A050158     | 1A050159     | 1A050162           | 98                  |                     |                       |
+
+Adding support for other Icom transceivers should be easy. Create an "Issue" if you needs support for your rig.
+
+Please let me know if you have tested the program.  I only have access to the Icom IC-7300 so verification that the program runs with other
+transceivers is very helpful. I will note these in the above table along with the program version that was tested.  Any buy reports are 
+greatly appreciated as well.  Please use Github Issues for this. Thanks.
 
 Notes
 -----
 * OmniRig needs to be installed in the default directory.  For OmniRig by VE3NEA this is in "C:\Program Files (x86)\Afreet\OmniRig\OmniRig.exe" and for OmniRig 2 by HB9RYZ this is in "C:\Program Files (x86)\Omni-Rig V2\omnirig2.exe".
 
-* If you encounter the following error
-"The program can't start because VCRUNTIME140_1.dll is missing from your computer.  Try reinstalling the program to fix this problem." download and install the Microsoft Visual C++ Redistributable (vc_redist.x86.exe or vr_redist.x64.exe) from 
-https://support.microsoft.com/en-gb/help/2977003/the-latest-supported-visual-c-downloads .
-
 * Since the seconds of the Icom clock can't be set directly, the program needs to wait until the full minute in order to set the time.  This means that the program might need up to one minute to run.
-
-* Adding support for other Icom transceivers should be easy, although many of them support NTP (Network Time Protocol). Create an "Issue" if you needs support for your rig.
 
 * For trouble shooting type `echo Exit Code is %errorlevel%` after the program has just run to see the exit code.
 
-The application is written in C++ with Visual Studio.
+The application is written in C# with Visual Studio.
 
 
 License
