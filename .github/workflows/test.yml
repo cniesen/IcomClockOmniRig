@@ -19,6 +19,9 @@ jobs:
 
     - name: Setup VSTest Path
       uses: darenm/Setup-VSTest@v1
+      
+    - name: Build source
+      run: msbuild
     
     - name: VSTest
       run: vstest.console.exe IcomclockOmniRigTests\bin\debug\IcomClockOmniRigTests.dll
