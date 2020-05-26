@@ -31,7 +31,7 @@ namespace IcomClockOmniRig {
             try {
                 OmniRig = new OmniRigX();
             } catch (COMException e) {
-                throw new ExitException(ExitCode.OMNIRIG_COM_INIT, "Error: OmniRig 2 not found (Is OmniRig 2 installed?)", e);
+                throw new ExitException(ExitCode.OMNIRIG_COM_CREATE, "Error: OmniRig 2 not found (Is OmniRig 2 installed?)", e);
             }
             // OmniRig 2 does some file copying while starting - we need to wait
             Sleep(3000);
