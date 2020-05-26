@@ -33,6 +33,7 @@ namespace IcomClockOmniRig {
 		public string TransceiverModel { get; } = "IC-7300";
 		public OmniRigVersion OmnirigVersion { get; } = OmniRigVersion.OmniRigVersion1;
 		public bool Quiet { get; } = false;
+		public bool ForceTranceiverModel { get; } = false;
 
 		private const string Preamble = "FEFE";
 		private const string Postamble = "FD";
@@ -119,6 +120,8 @@ namespace IcomClockOmniRig {
 					}
 				} else if (arg == "-q") {
 			        Quiet = true;
+				} else if (arg == "-f") {
+					ForceTranceiverModel = true;
 				} else if (arg == "-h") {
 					PrintHelp();
 					throw new ExitException(ExitCode.SUCCESS);
@@ -184,6 +187,7 @@ namespace IcomClockOmniRig {
 				"\t\t\t1 = original OmniRig by VE3NEA\n" +
 				"\t\t\t2 = updated OmniRig by HB9RYZ\n\n" +
 				"\t-q\t\tQuiet, don't output messages\n\n" +
+				"\t-f\t\tForce tranceiver model, allow mismatch between OmniRig and this program.  Avoid this option if possible.\n\n" +
 				"\t-h\t\tShow this help message\n\n"
 				);
 		}

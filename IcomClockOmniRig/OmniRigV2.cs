@@ -18,6 +18,8 @@
 
 using OmniRig2;
 using System;
+using System.Runtime.InteropServices;
+using static System.Threading.Thread;
 
 namespace IcomClockOmniRig {
     class OmniRigV2 : OmniRigBase {
@@ -26,7 +28,13 @@ namespace IcomClockOmniRig {
         private IRigX Rig = null;
         
         public OmniRigV2(ProgramOptions programOptions) : base(programOptions) {
-            OmniRig = new OmniRigX();
+            try {
+                OmniRig = new OmniRigX();
+            } catch (COMException e) {
+                throw new ExitException(ExitCode.OMNIRIG_COM_CREATE, "Error: OmniRig 2 not found (Is OmniRig 2 installed?)", e);
+            }
+            // OmniRig 2 does some file copying while starting - we need to wait
+            Sleep(3000);
             OmniRig.CustomReply += OmniRig_CustomReply;
         }
 
@@ -85,13 +93,13 @@ namespace IcomClockOmniRig {
         public override void CheckRigStatus() {
             switch (GetRig().Status) {
                 case OmniRig2.RigStatusX.ST_NOTCONFIGURED:
-                    throw new ExitException(ExitCode.OMNIRIG_STATUS_NOTCONFIGURED, "ERROR: OmniRig not configured");
+                    throw new ExitException(ExitCode.OMNIRIG_STATUS_NOTCONFIGURED, "ERROR: Rig " + programOptions.RigNumber + " in OmniRig not configured");
                 case OmniRig2.RigStatusX.ST_DISABLED:
                     throw new ExitException(ExitCode.OMNIRIG_STATUS_DISABLED, "ERROR: OmniRig reports disabled");
                 case OmniRig2.RigStatusX.ST_PORTBUSY:
-                    throw new ExitException(ExitCode.OMNIRIG_STATUS_PORTBUSY, "ERROR: OmniRig reports COM port busy");
+                    throw new ExitException(ExitCode.OMNIRIG_STATUS_PORTBUSY, "ERROR: OmniRig reports COM port busy (Is the transceiver connected? Is the COM port used by some other program?)");
                 case OmniRig2.RigStatusX.ST_NOTRESPONDING:
-                     throw new ExitException(ExitCode.OMNIRIG_STATUS_NOTRESPONDING, "ERROR: Transceiver does not respond to OmniRig commands");
+                     throw new ExitException(ExitCode.OMNIRIG_STATUS_NOTRESPONDING, "ERROR: Transceiver does not respond to OmniRig commands (Is the transceiver turned on?)");
                 case OmniRig2.RigStatusX.ST_ONLINE:
                     break;
                 default:

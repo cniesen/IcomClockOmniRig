@@ -30,8 +30,7 @@ namespace IcomClockOmniRig {
 		OPTION_CONTROLLER_ADDRESS = -5,
 		OPTION_OMNIRIG_VERSION = -6,
 
-		OMNIRIG_COM_INIT = -10,
-		OMNIRIG_COM_CREATE = -11,
+		OMNIRIG_COM_CREATE = -10,
 
 		OMNIRIG_STATUS_NOTCONFIGURED = -50,
 		OMNIRIG_STATUS_DISABLED = -51,
@@ -45,13 +44,6 @@ namespace IcomClockOmniRig {
 		OMNIRIG_SET_DATE_TIMEOUT = 111,
 		OMNIRIG_SET_OFFSET_ERROR = 120,
 		OMNIRIG_SET_OFFSET_TIMEOUT = 121,
-
-		INTERNAL_OMNIRIG_SET_TIME = -500,
-		INTERNAL_OMNIRIG_SET_DATE = -501,
-		INTERNAL_OMNIRIG_SET_OFFSET = -502,
-
-		INTERNAL_COMMAND_MAP_TRANSCEIVER = -600,
-		INTERNAL_COMMAND_MAP_COMMAND = -601,
     }
 
     public class ExitException : Exception {
@@ -64,5 +56,9 @@ namespace IcomClockOmniRig {
 		public ExitException(ExitCode exitCode, string message) :base(message) {
 			ExitCode = exitCode;
         }
-    }
+
+		public ExitException(ExitCode exitCode, string message, Exception e) : base(message, e) {
+			ExitCode = exitCode;
+		}
+	}
 }
