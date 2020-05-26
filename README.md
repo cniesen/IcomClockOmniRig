@@ -56,17 +56,16 @@ Supported Transceivers
 | Icom IC-R8600 | 1A050131     | 1A050132     | 1A050135           | 96                  |                     |                       |
 | Icom IC-R9500 | 1A050048     | 1A050049     | 1A050051           | 72                  |                     |                       |
 
-Adding support for other Icom transceivers should be easy. Create an "Issue" if you needs support for your rig.
+Adding support for other Icom transceivers should be easy. Create an "Issue" if you needs support for your rig.  Other brands like Yaesu and Kenwood
+might work as well. Voice up if there is a need for this feature.
 
 Please let me know if you have tested the program.  I only have access to the Icom IC-7300 so verification that the program runs with other
-transceivers is very helpful. I will note these in the above table along with the program version that was tested.  Any buy reports are 
-greatly appreciated as well.  Please use Github Issues for this. Thanks.
+transceivers is very helpful. I will note these in the above table along with the program version that was tested.  Any bug reports are 
+greatly appreciated as well.  Please use Github Issues or the support email list for this. Thanks.
 
 
 Notes
 -----
-* OmniRig needs to be installed in the default directory.  For OmniRig by VE3NEA this is in "C:\Program Files (x86)\Afreet\OmniRig\OmniRig.exe" and for OmniRig 2 by HB9RYZ this is in "C:\Program Files (x86)\Omni-Rig V2\omnirig2.exe".
-
 * Since the seconds of the Icom clock can't be set directly, the program needs to wait until the full minute in order to set the time.  This means that the program might need up to one minute to run.
 
 * For trouble shooting type `echo Exit Code is %errorlevel%` after the program has just run to see the exit code.
