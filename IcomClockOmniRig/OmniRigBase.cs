@@ -53,6 +53,17 @@ namespace IcomClockOmniRig {
             Console.WriteLine();
         }
 
+        public void CheckTransceiverModel() {
+            if (programOptions.ForceTranceiverModel) {
+                return;
+            }
+
+            (string rigType, string rigStatus) rigInfo = RigInfo(programOptions.RigNumber);
+            if (programOptions.TransceiverModel != rigInfo.rigType) {
+                throw new ExitException(ExitCode.OPTION_TRANSCEIVER_MODEL, "Error: Transceiver model doesn't match transceiver in OmniRig.  This check can be overwritten via the '-f' flag but be careful.");
+            }
+        }
+
         public void SetTime() {
             if (!programOptions.Quiet) {
                 Console.WriteLine("Waiting for the full minute to set time");
@@ -72,7 +83,7 @@ namespace IcomClockOmniRig {
             }
             if (!timeOk.HasValue) {
                 Console.WriteLine(" - Rig response: timed out");
-                throw new ExitException(ExitCode.OMNIRIG_SET_TIME_TIMEOUT, "Error: OmniRig did not respond when setting the time");
+                throw new ExitException(ExitCode.OMNIRIG_SET_TIME_TIMEOUT, "Error: OmniRig did not respond when setting the time (Correct transceiver model, address, and command?)");
             } else if (timeOk.Value) {
                 Console.WriteLine(" - Rig response: OK");
             } else { 
@@ -93,7 +104,7 @@ namespace IcomClockOmniRig {
             }
             if (!timeOk.HasValue) {
                 Console.WriteLine(" - Rig response: timed out");
-                throw new ExitException(ExitCode.OMNIRIG_SET_TIME_TIMEOUT, "Error: OmniRig did not respond when setting the time");
+                throw new ExitException(ExitCode.OMNIRIG_SET_TIME_TIMEOUT, "Error: OmniRig did not respond when setting the time (Correct transceiver model, address, and command?)");
             } else if (!timeOk.Value) {
                 Console.WriteLine(" - Rig response: Error");
                 throw new ExitException(ExitCode.OMNIRIG_SET_TIME_ERROR, "Error: OmniRig raised and error when setting the time");
@@ -112,7 +123,7 @@ namespace IcomClockOmniRig {
                 }
                 if (!timeOk.HasValue) {
                     Console.WriteLine(" - Rig response: timed out");
-                    throw new ExitException(ExitCode.OMNIRIG_SET_TIME_TIMEOUT, "Error: OmniRig did not respond when setting the time");
+                    throw new ExitException(ExitCode.OMNIRIG_SET_TIME_TIMEOUT, "Error: OmniRig did not respond when setting the time (Correct transceiver model, address, and command?)");
                 } else if (!timeOk.Value) {
                     Console.WriteLine(" - Rig response: Error");
                     throw new ExitException(ExitCode.OMNIRIG_SET_TIME_ERROR, "Error: OmniRig raised and error when setting the time");
@@ -139,7 +150,7 @@ namespace IcomClockOmniRig {
             }
             if (!offsetOk.HasValue) {
                 Console.WriteLine(" - Rig response: timed out");
-                throw new ExitException(ExitCode.OMNIRIG_SET_OFFSET_TIMEOUT, "Error: OmniRig did not respond when setting the utc offset");
+                throw new ExitException(ExitCode.OMNIRIG_SET_OFFSET_TIMEOUT, "Error: OmniRig did not respond when setting the utc offset (Correct transceiver model, address, and command?)");
             } else if (offsetOk.Value) {
                 Console.WriteLine(" - Rig response: OK");
             } else {

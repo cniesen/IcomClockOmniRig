@@ -18,6 +18,7 @@
 
 using OmniRig1;
 using System;
+using System.Runtime.InteropServices;
 
 namespace IcomClockOmniRig {
     class OmniRigV1 : OmniRigBase {
@@ -26,6 +27,11 @@ namespace IcomClockOmniRig {
         private IRigX Rig = null;
 
         public OmniRigV1(ProgramOptions programOptions) : base(programOptions) {
+            try {
+                OmniRig = new OmniRigX();
+            } catch (COMException e) {
+                throw new ExitException(ExitCode.OMNIRIG_COM_INIT, "Error: OmniRig not found (Is OmniRig installed?)", e);
+            }
             OmniRig = new OmniRigX();
             OmniRig.CustomReply += OmniRig_CustomReply;
         }
@@ -74,13 +80,13 @@ namespace IcomClockOmniRig {
         public override void CheckRigStatus() {
             switch (GetRig().Status) {
                 case OmniRig1.RigStatusX.ST_NOTCONFIGURED:
-                    throw new ExitException(ExitCode.OMNIRIG_STATUS_NOTCONFIGURED, "ERROR: OmniRig not configured");
+                    throw new ExitException(ExitCode.OMNIRIG_STATUS_NOTCONFIGURED, "ERROR: Rig " + programOptions.RigNumber + " in OmniRig not configured");
                 case OmniRig1.RigStatusX.ST_DISABLED:
                     throw new ExitException(ExitCode.OMNIRIG_STATUS_DISABLED, "ERROR: OmniRig reports disabled");
                 case OmniRig1.RigStatusX.ST_PORTBUSY:
-                    throw new ExitException(ExitCode.OMNIRIG_STATUS_PORTBUSY, "ERROR: OmniRig reports COM port busy");
+                    throw new ExitException(ExitCode.OMNIRIG_STATUS_PORTBUSY, "ERROR: OmniRig reports COM port busy (Is the transceiver connected? Is the COM port used by some other program?)");
                 case OmniRig1.RigStatusX.ST_NOTRESPONDING:
-                    throw new ExitException(ExitCode.OMNIRIG_STATUS_NOTRESPONDING, "ERROR: Transceiver does not respond to OmniRig commands");
+                    throw new ExitException(ExitCode.OMNIRIG_STATUS_NOTRESPONDING, "ERROR: Transceiver does not respond to OmniRig commands (Is the transceiver turned on?)");
                 case OmniRig1.RigStatusX.ST_ONLINE:
                     break;
                 default:

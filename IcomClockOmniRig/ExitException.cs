@@ -64,5 +64,9 @@ namespace IcomClockOmniRig {
 		public ExitException(ExitCode exitCode, string message) :base(message) {
 			ExitCode = exitCode;
         }
-    }
+
+		public ExitException(ExitCode exitCode, string message, Exception e) : base(message, e) {
+			ExitCode = exitCode;
+		}
+	}
 }

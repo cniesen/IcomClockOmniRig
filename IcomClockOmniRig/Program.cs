@@ -40,21 +40,17 @@ namespace IcomClockOmniRig {
                     omnirig.DisplayRigInfo();
                 }
                 omnirig.CheckRigStatus();
+                omnirig.CheckTransceiverModel();
                 omnirig.SetTime();
                 omnirig.SetDate();
                 omnirig.SetOffset();
 
-                Console.WriteLine("Done, Press return to close5");
-                Console.ReadKey();
                 Environment.Exit((int)ExitCode.SUCCESS);
             } catch (ExitException e) {
                 if (!String.IsNullOrWhiteSpace(e.Message)) {
                     Console.WriteLine(e.Message);
                 }
-                Console.WriteLine("Done, Press return to close");
-                Console.ReadKey();
                 Environment.Exit((int)e.ExitCode);
-
             }
         }
     }

@@ -28,6 +28,7 @@ namespace IcomClockOmniRig.Tests {
             "\t\t\t1 = original OmniRig by VE3NEA\n" +
             "\t\t\t2 = updated OmniRig by HB9RYZ\n\n" +
             "\t-q\t\tQuiet, don't output messages\n\n" +
+            "\t-f\t\tForce tranceiver model, allow mismatch between OmniRig and this program.  Avoid this option if possible.\n\n" +
             "\t-h\t\tShow this help message\n\n";
 
         [TestMethod()]
@@ -39,6 +40,7 @@ namespace IcomClockOmniRig.Tests {
             Assert.AreEqual("94", programOptions.TransceiverAddress);
             Assert.AreEqual("E0", programOptions.ControllerAddress);
             Assert.IsFalse(programOptions.Quiet);
+            Assert.IsFalse(programOptions.ForceTranceiverModel);
         }
 
         [TestMethod()]
@@ -284,6 +286,12 @@ namespace IcomClockOmniRig.Tests {
         public void Args_Quiet() {
             ProgramOptions programOptions = new ProgramOptions(new string[1] { "-q" });
             Assert.IsTrue(programOptions.Quiet);
+        }
+
+        [TestMethod()]
+        public void Args_ForceTranceiverModel() {
+            ProgramOptions programOptions = new ProgramOptions(new string[1] { "-f" });
+            Assert.IsTrue(programOptions.ForceTranceiverModel);
         }
 
         [TestMethod()]
