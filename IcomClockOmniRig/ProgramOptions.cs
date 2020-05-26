@@ -41,8 +41,15 @@ namespace IcomClockOmniRig {
 		private readonly IDictionary<string, IDictionary<string, string>> Transceivers = new Dictionary<string, IDictionary<string, string>>() {
 		    {"IC-7100", new Dictionary<string, string> {{"setDateCommand", "1A050120"}, {"setTimeCommand", "1A050121"}, {"setUtcOffsetCommand", "1A050123"}, {"transceiverAddress", "88"}}},
     		{"IC-7300", new Dictionary<string, string> {{"setDateCommand", "1A050094"}, {"setTimeCommand", "1A050095"}, {"setUtcOffsetCommand", "1A050096"}, {"transceiverAddress", "94"}}},
-	    	{"IC-7610", new Dictionary<string, string> {{"setDateCommand", "1A050158"}, {"setTimeCommand", "1A050159"}, {"setUtcOffsetCommand", "1A050162"}, {"transceiverAddress", "98" } }}
-        };
+			{"IC-7600", new Dictionary<string, string> {{"setDateCommand", "1A050053"}, {"setTimeCommand", "1A050054"}, {"setUtcOffsetCommand", "1A050056"}, {"transceiverAddress", "7A"}}},
+			{"IC-7610", new Dictionary<string, string> {{"setDateCommand", "1A050158"}, {"setTimeCommand", "1A050159"}, {"setUtcOffsetCommand", "1A050162"}, {"transceiverAddress", "98"}}},
+			{"IC-7700", new Dictionary<string, string> {{"setDateCommand", "1A050058"}, {"setTimeCommand", "1A050059"}, {"setUtcOffsetCommand", "1A050061"}, {"transceiverAddress", "74"}}},
+			{"IC-7850", new Dictionary<string, string> {{"setDateCommand", "1A050095"}, {"setTimeCommand", "1A050096"}, {"setUtcOffsetCommand", "1A050099"}, {"transceiverAddress", "8E"}}},
+			{"IC-7851", new Dictionary<string, string> {{"setDateCommand", "1A050095"}, {"setTimeCommand", "1A050096"}, {"setUtcOffsetCommand", "1A050099"}, {"transceiverAddress", "8E"}}},
+			{"IC-9700", new Dictionary<string, string> {{"setDateCommand", "1A050179"}, {"setTimeCommand", "1A050180"}, {"setUtcOffsetCommand", "1A050184"}, {"transceiverAddress", "A2"}}},	
+			{"IC-R8600", new Dictionary<string, string> {{"setDateCommand", "1A050131"}, {"setTimeCommand", "1A050132"}, {"setUtcOffsetCommand", "1A050135"}, {"transceiverAddress", "96"}}},
+			{"IC-R9500", new Dictionary<string, string> {{"setDateCommand", "1A050048"}, {"setTimeCommand", "1A050049"}, {"setUtcOffsetCommand", "1A050051"}, {"transceiverAddress", "72"}}}
+		};
 
 		public ProgramOptions(string[] args) {
 			string TransceiverAddressOverride = null;
