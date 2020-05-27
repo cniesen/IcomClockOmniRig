@@ -58,7 +58,7 @@ Supported Transceivers
 | Icom IC-R8600 | 1A050131     | 1A050132     | 1A050135           | 96                  |                     |                       |
 | Icom IC-R9500 | 1A050048     | 1A050049     | 1A050051           | 72                  |                     |                       |
 
-Tested IcomClockOmniRig in parentheses.
+Tested IcomClockOmniRig version in parentheses.
 
 Adding support for other Icom transceivers should be easy. Create an "Issue" if you needs support for your rig.  Other brands like Yaesu and Kenwood
 might work as well. Voice up if there is a need for this feature.
