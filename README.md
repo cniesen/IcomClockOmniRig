@@ -68,6 +68,11 @@ transceivers is very helpful. I will note these in the above table along with th
 greatly appreciated as well.  Please use Github Issues or the support email list for this. Thanks.
 
 
+Demo
+----
+[![Demo video of IcomClockOmniRig](demo-video.png)](https://youtu.be/mh5S3XeyMyI)
+
+
 Notes
 -----
 * Since the seconds of the Icom clock can't be set directly, the program needs to wait until the full minute in order to set the time.  This means that the program might need up to one minute to run.
