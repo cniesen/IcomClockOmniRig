@@ -59,6 +59,8 @@ namespace IcomClockOmniRig {
             }
 
             (string rigType, string rigStatus) rigInfo = RigInfo(programOptions.RigNumber);
+            // Allow TransceiverModel to be a prefix of rigType
+            rigInfo.rigType = rigInfo.rigType.Substring(0, Min(rigInfo.rigType.Length, programOptions.TransceiverModel.Length));
             if (programOptions.TransceiverModel != rigInfo.rigType) {
                 throw new ExitException(ExitCode.OPTION_TRANSCEIVER_MODEL, "Error: Transceiver model doesn't match transceiver in OmniRig.  This check can be overwritten via the '-f' flag but be careful.");
             }
