@@ -34,6 +34,8 @@ namespace IcomClockOmniRig {
             }
             OmniRig = new OmniRigX();
             OmniRig.CustomReply += OmniRig_CustomReply;
+            programOptions.InitRigBasedDefaults(OmniRig.Rig1.RigType);
+
         }
 
         protected override string SoftwareVersion() {

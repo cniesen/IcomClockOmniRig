@@ -28,9 +28,9 @@ namespace IcomClockOmniRig {
 	public class ProgramOptions {
 		public bool ReversedTimeZone { get; } = false;
 		public int RigNumber { get; } = 1;
-		public string TransceiverAddress { get; } = "94";
+		public string TransceiverAddress { get; private set; } = null;
 		public string ControllerAddress { get; } = "E0";
-		public string TransceiverModel { get; } = "IC-7300";
+		public string TransceiverModel { get; private set; } = null;
 		public OmniRigVersion OmnirigVersion { get; } = OmniRigVersion.OmniRigVersion1;
 		public bool Quiet { get; } = false;
 		public bool ForceTranceiverModel { get; } = false;
@@ -39,21 +39,36 @@ namespace IcomClockOmniRig {
 		private const string Postamble = "FD";
 
 		private readonly IDictionary<string, IDictionary<string, string>> Transceivers = new Dictionary<string, IDictionary<string, string>>() {
-		    {"IC-7100", new Dictionary<string, string> {{"setDateCommand", "1A050120"}, {"setTimeCommand", "1A050121"}, {"setUtcOffsetCommand", "1A050123"}, {"transceiverAddress", "88"}}},
-    		{"IC-7300", new Dictionary<string, string> {{"setDateCommand", "1A050094"}, {"setTimeCommand", "1A050095"}, {"setUtcOffsetCommand", "1A050096"}, {"transceiverAddress", "94"}}},
+			{"IC-7100", new Dictionary<string, string> {{"setDateCommand", "1A050120"}, {"setTimeCommand", "1A050121"}, {"setUtcOffsetCommand", "1A050123"}, {"transceiverAddress", "88"}}},
+			{"IC-7300", new Dictionary<string, string> {{"setDateCommand", "1A050094"}, {"setTimeCommand", "1A050095"}, {"setUtcOffsetCommand", "1A050096"}, {"transceiverAddress", "94"}}},
 			{"IC-7600", new Dictionary<string, string> {{"setDateCommand", "1A050053"}, {"setTimeCommand", "1A050054"}, {"setUtcOffsetCommand", "1A050056"}, {"transceiverAddress", "7A"}}},
 			{"IC-7610", new Dictionary<string, string> {{"setDateCommand", "1A050158"}, {"setTimeCommand", "1A050159"}, {"setUtcOffsetCommand", "1A050162"}, {"transceiverAddress", "98"}}},
 			{"IC-7700", new Dictionary<string, string> {{"setDateCommand", "1A050058"}, {"setTimeCommand", "1A050059"}, {"setUtcOffsetCommand", "1A050061"}, {"transceiverAddress", "74"}}},
 			{"IC-7850", new Dictionary<string, string> {{"setDateCommand", "1A050095"}, {"setTimeCommand", "1A050096"}, {"setUtcOffsetCommand", "1A050099"}, {"transceiverAddress", "8E"}}},
 			{"IC-7851", new Dictionary<string, string> {{"setDateCommand", "1A050095"}, {"setTimeCommand", "1A050096"}, {"setUtcOffsetCommand", "1A050099"}, {"transceiverAddress", "8E"}}},
-			{"IC-9700", new Dictionary<string, string> {{"setDateCommand", "1A050179"}, {"setTimeCommand", "1A050180"}, {"setUtcOffsetCommand", "1A050184"}, {"transceiverAddress", "A2"}}},	
+			{"IC-9700", new Dictionary<string, string> {{"setDateCommand", "1A050179"}, {"setTimeCommand", "1A050180"}, {"setUtcOffsetCommand", "1A050184"}, {"transceiverAddress", "A2"}}},
 			{"IC-R8600", new Dictionary<string, string> {{"setDateCommand", "1A050131"}, {"setTimeCommand", "1A050132"}, {"setUtcOffsetCommand", "1A050135"}, {"transceiverAddress", "96"}}},
 			{"IC-R9500", new Dictionary<string, string> {{"setDateCommand", "1A050048"}, {"setTimeCommand", "1A050049"}, {"setUtcOffsetCommand", "1A050051"}, {"transceiverAddress", "72"}}}
 		};
 
+		private readonly IDictionary<string, string> RigTypes = new Dictionary<string, string>() {
+			{"IC-7100", "IC-7100"}, {"IC-7100-DATA-FIL1", "IC-7100"}, {"IC-7100e4", "IC-7100"}, {"IC-7100e4-DATA", "IC-7100"},
+			{"IC-7300", "IC-7300"}, {"IC-7300-DATA", "IC-7300"},
+			{"IC-7600", "IC-7600"}, {"IC-7600v2", "IC-7600"}, {"IC-7600v2-DATA", "IC-7600"},
+			{"IC-7610", "IC-7610"}, {"IC-7610-DATA", "IC-7610"}, {"IC-7610-DATA-FIL1", "IC-7610"},
+			{"IC-7700", "IC-7700"}, {"IC-7700v2", "IC-7700"}, {"IC-7700v2-DATA", "IC-7700"},
+			{"IC-7850", "IC-7850"}, {"IC-7850-DATA", ""}, {"IC-7850-DATA-FIL1", ""},
+			{"IC-7851", "IC-7851"}, {"IC-7851-DATA", "IC-7851"}, {"IC-7851-DATA-FIL1", "IC-7851"},
+			{"IC-9700", "IC-9700"}, {"IC-9700-DATA", "IC-9700"}, {"IC-9700-SAT", "IC-9700"},
+			{"IC-R8600", "IC-R8600"},
+			{"IC-R9500", "IC-R9500"}
+		};
+
 		public ProgramOptions(string[] args) {
-			string TransceiverAddressOverride = null;
-			
+			if (!Quiet) {
+				PrintProgramInfo();
+			}
+
 			for (int i = 0; i < args.Length; ++i) {
 				string arg = args[i]; 
 				if(arg == "-u") {
@@ -91,7 +106,7 @@ namespace IcomClockOmniRig {
 						throw new ExitException(ExitCode.OPTION_TRANSCEIVER_ADDRESS);
 					}
 					if (Utilities.IsHex(args[i])) {
-						TransceiverAddressOverride = args[i];
+						TransceiverAddress = args[i];
 					} else {
 						Console.WriteLine("ERROR: Invalid transceiver address specified: " + args[i] + "\n\n");
 						PrintHelp();
@@ -158,20 +173,13 @@ namespace IcomClockOmniRig {
 				default:
 					throw new ArgumentException("Invalid OmniRigVersion: " + OmnirigVersion);
 			}
-
-			TransceiverAddress = (TransceiverAddressOverride == null) ? LookupTransceiverAddress() : TransceiverAddressOverride;
-
-			if (!Quiet) {
-				PrintProgramInfo();
-				PrintOptions();
-			}
 		}
 		
 		private void PrintProgramInfo() {
 			Console.Write(
 				" ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n" +
 				" ::                                                                          ::\n" +
-				" ::   IcomClockOmniRig 2.0  -  https://github.com/cniesen/IcomClockOmniRig   ::\n" +
+				" ::   IcomClockOmniRig 2.1  -  https://github.com/cniesen/IcomClockOmniRig   ::\n" +
 				" ::                                                                          ::\n" +
 				" ::    A program to set the Icom tranceiver clock to your computer's time    ::\n" +
 				" ::                                                                          ::\n" +
@@ -186,9 +194,9 @@ namespace IcomClockOmniRig {
 				"Options:\n" +
 				"\t-u\t\tReverse local and UTC time (show UTC as clock and local time as on UTC display)\n\n" +
 				"\t-r <number>\tThe selected rig in OmniRig (default: 1)\n\n" +
-				"\t-m <model>\tThe Icom transceiver model (default: IC-7300)\n" +
+				"\t-m <model>\tThe Icom transceiver model (default: auto detect from OmniRig)\n" +
 				"\t\t\tValid models: " + ListValidTransceiverModels() + "\n\n" +
-				"\t-a <hex>\tThe Icom transceiver address (default: 94)\n\n" +
+				"\t-a <hex>\tThe Icom transceiver address (default: rig default address)\n\n" +
 				"\t-c <hex>\tThe controller address (default: E0)\n\n" +
 				"\t-o <number>\tOmniRig version number (default: 1)\n" +
 				"\t\t\t1 = original OmniRig by VE3NEA\n" +
@@ -210,8 +218,31 @@ namespace IcomClockOmniRig {
 
 		}
 
+		public void InitRigBasedDefaults(string rigType) {
+			if (TransceiverModel == null) {
+				TransceiverModel = LookupTransceiverModel(rigType);
+			}
+
+			if (TransceiverAddress == null) {
+				TransceiverAddress = LookupTransceiverAddress();
+			}
+
+			if (!Quiet) {
+				PrintOptions();
+			}
+		}
+
 		private bool IsValidTransceiverModel(string transceiverModel) {
 			return Transceivers.ContainsKey(transceiverModel);
+		}
+
+		public string LookupTransceiverModel(string rigType) {
+			try {
+				return RigTypes[rigType];
+			} catch (KeyNotFoundException e) {
+				throw new KeyNotFoundException("OmniRig's rig type '" + rigType + "' not found", e);
+
+			}
 		}
 
 		public string LookupTransceiverAddress() {
@@ -227,7 +258,7 @@ namespace IcomClockOmniRig {
 			try {
 				return Preamble + TransceiverAddress + ControllerAddress + Transceivers[TransceiverModel][command] + data + Postamble;
 			} catch (KeyNotFoundException e) {
-				throw new KeyNotFoundException("Command " + command + " not found for tranceiver " + TransceiverModel, e);
+				throw new KeyNotFoundException("Command '" + command + "' not found for tranceiver " + TransceiverModel, e);
 				
 			}
 		}

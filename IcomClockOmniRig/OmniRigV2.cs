@@ -36,6 +36,7 @@ namespace IcomClockOmniRig {
             // OmniRig 2 does some file copying while starting - we need to wait
             Sleep(3000);
             OmniRig.CustomReply += OmniRig_CustomReply;
+            programOptions.InitRigBasedDefaults(OmniRig.Rig1.RigType);
         }
 
         protected override string SoftwareVersion() {

@@ -9,7 +9,7 @@ namespace IcomClockOmniRig.Tests {
         readonly string help_beginning =
             " ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n" +
             " ::                                                                          ::\n" +
-            " ::   IcomClockOmniRig 2.0  -  https://github.com/cniesen/IcomClockOmniRig   ::\n" +
+            " ::   IcomClockOmniRig 2.1  -  https://github.com/cniesen/IcomClockOmniRig   ::\n" +
             " ::                                                                          ::\n" +
             " ::    A program to set the Icom tranceiver clock to your computer's time    ::\n" +
             " ::                                                                          ::\n" +
@@ -20,9 +20,9 @@ namespace IcomClockOmniRig.Tests {
             "Options:\n" +
             "\t-u\t\tReverse local and UTC time (show UTC as clock and local time as on UTC display)\n\n" +
             "\t-r <number>\tThe selected rig in OmniRig (default: 1)\n\n" +
-            "\t-m <model>\tThe Icom transceiver model (default: IC-7300)\n" +
+            "\t-m <model>\tThe Icom transceiver model (default: auto detect from OmniRig)\n" +
             "\t\t\tValid models: IC-7100, IC-7300, IC-7600, IC-7610, IC-7700, IC-7850, IC-7851, IC-9700, IC-R8600, IC-R9500\n\n" +
-            "\t-a <hex>\tThe Icom transceiver address (default: 94)\n\n" +
+            "\t-a <hex>\tThe Icom transceiver address (default: rig default address)\n\n" +
             "\t-c <hex>\tThe controller address (default: E0)\n\n" +
             "\t-o <number>\tOmniRig version number (default: 1)\n" +
             "\t\t\t1 = original OmniRig by VE3NEA\n" +
