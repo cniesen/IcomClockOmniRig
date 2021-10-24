@@ -53,17 +53,6 @@ namespace IcomClockOmniRig {
             Console.WriteLine();
         }
 
-        public void CheckTransceiverModel() {
-            if (programOptions.ForceTranceiverModel) {
-                return;
-            }
-
-            (string rigType, string rigStatus) rigInfo = RigInfo(programOptions.RigNumber);
-            if (programOptions.TransceiverModel != rigInfo.rigType) {
-                throw new ExitException(ExitCode.OPTION_TRANSCEIVER_MODEL, "Error: Transceiver model doesn't match transceiver in OmniRig.  This check can be overwritten via the '-f' flag but be careful.");
-            }
-        }
-
         public void SetTime() {
             if (!programOptions.Quiet) {
                 Console.WriteLine("Waiting for the full minute to set time");

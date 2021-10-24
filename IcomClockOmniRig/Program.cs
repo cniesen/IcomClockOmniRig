@@ -40,7 +40,6 @@ namespace IcomClockOmniRig {
                     omnirig.DisplayRigInfo();
                 }
                 omnirig.CheckRigStatus();
-                omnirig.CheckTransceiverModel();
                 omnirig.SetTime();
                 omnirig.SetDate();
                 omnirig.SetOffset();
