@@ -32,10 +32,8 @@ namespace IcomClockOmniRig {
             } catch (COMException e) {
                 throw new ExitException(ExitCode.OMNIRIG_COM_CREATE, "Error: OmniRig not found (Is OmniRig installed?)", e);
             }
-            OmniRig = new OmniRigX();
             OmniRig.CustomReply += OmniRig_CustomReply;
             programOptions.InitRigBasedDefaults(OmniRig.Rig1.RigType);
-
         }
 
         protected override string SoftwareVersion() {

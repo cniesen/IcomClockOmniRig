@@ -28,19 +28,39 @@ namespace IcomClockOmniRig.Tests {
             "\t\t\t1 = original OmniRig by VE3NEA\n" +
             "\t\t\t2 = updated OmniRig by HB9RYZ\n\n" +
             "\t-q\t\tQuiet, don't output messages\n\n" +
-            "\t-f\t\tForce tranceiver model, allow mismatch between OmniRig and this program.  Avoid this option if possible.\n\n" +
             "\t-h\t\tShow this help message\n\n";
 
         [TestMethod()]
-        public void Args_Defaults() {
+        public void AutoDetect_StandardRig() {
             ProgramOptions programOptions = new ProgramOptions(new string[0]);
+            programOptions.InitRigBasedDefaults("IC-7300-DATA");
             Assert.IsFalse(programOptions.ReversedTimeZone);
             Assert.AreEqual(1, programOptions.RigNumber);
             Assert.AreEqual("IC-7300", programOptions.TransceiverModel);
             Assert.AreEqual("94", programOptions.TransceiverAddress);
             Assert.AreEqual("E0", programOptions.ControllerAddress);
             Assert.IsFalse(programOptions.Quiet);
-            Assert.IsFalse(programOptions.ForceTranceiverModel);
+        }
+
+        [TestMethod()]
+        public void AutoDetect_CustomRig() {
+            ProgramOptions programOptions = new ProgramOptions(new string[0]);
+            programOptions.InitRigBasedDefaults("IC-7300-DATA-foobar");
+            Assert.IsFalse(programOptions.ReversedTimeZone);
+            Assert.AreEqual(1, programOptions.RigNumber);
+            Assert.AreEqual("IC-7300", programOptions.TransceiverModel);
+            Assert.AreEqual("94", programOptions.TransceiverAddress);
+            Assert.AreEqual("E0", programOptions.ControllerAddress);
+            Assert.IsFalse(programOptions.Quiet);
+        }
+
+        [TestMethod()]
+        public void Args_Defaults() {
+            ProgramOptions programOptions = new ProgramOptions(new string[0]);
+            Assert.IsFalse(programOptions.ReversedTimeZone);
+            Assert.AreEqual(1, programOptions.RigNumber);
+            Assert.AreEqual("E0", programOptions.ControllerAddress);
+            Assert.IsFalse(programOptions.Quiet);
         }
 
         [TestMethod()]
@@ -81,8 +101,7 @@ namespace IcomClockOmniRig.Tests {
                     Assert.AreEqual(ExitCode.OPTION_RIG_NUMBER, e.ExitCode);
                     Assert.AreEqual("", e.Message);
                 }
-                StringAssert.StartsWith(sw.ToString(), expectedErrorMessage + help_beginning);
-                StringAssert.EndsWith(sw.ToString(), help_ending);
+                StringAssert.Contains(sw.ToString(), expectedErrorMessage);
             }
         }
 
@@ -98,8 +117,7 @@ namespace IcomClockOmniRig.Tests {
                     Assert.AreEqual(ExitCode.OPTION_RIG_NUMBER, e.ExitCode);
                     Assert.AreEqual("", e.Message);
                 }
-                StringAssert.StartsWith(sw.ToString(), expectedErrorMessage + help_beginning);
-                StringAssert.EndsWith(sw.ToString(), help_ending);
+                StringAssert.Contains(sw.ToString(), expectedErrorMessage);
             }
         }
 
@@ -115,14 +133,14 @@ namespace IcomClockOmniRig.Tests {
                     Assert.AreEqual(ExitCode.OPTION_RIG_NUMBER, e.ExitCode);
                     Assert.AreEqual("", e.Message);
                 }
-                StringAssert.StartsWith(sw.ToString(), expectedErrorMessage + help_beginning);
-                StringAssert.EndsWith(sw.ToString(), help_ending);
+                StringAssert.Contains(sw.ToString(), expectedErrorMessage);
             }
         }
 
         [TestMethod()]
         public void Args_TransceiverModel() {
             ProgramOptions programOptions = new ProgramOptions(new string[2] { "-m", "IC-7100" });
+            programOptions.InitRigBasedDefaults("IC-7300");
             Assert.AreEqual("IC-7100", programOptions.TransceiverModel);
         }
 
@@ -138,8 +156,7 @@ namespace IcomClockOmniRig.Tests {
                     Assert.AreEqual(ExitCode.OPTION_TRANSCEIVER_MODEL, e.ExitCode);
                     Assert.AreEqual("", e.Message);
                 }
-                StringAssert.StartsWith(sw.ToString(), expectedErrorMessage + help_beginning);
-                StringAssert.EndsWith(sw.ToString(), help_ending);
+                StringAssert.Contains(sw.ToString(), expectedErrorMessage);
             }
         }
 
@@ -155,14 +172,14 @@ namespace IcomClockOmniRig.Tests {
                     Assert.AreEqual(ExitCode.OPTION_TRANSCEIVER_MODEL, e.ExitCode);
                     Assert.AreEqual("", e.Message);
                 }
-                StringAssert.StartsWith(sw.ToString(), expectedErrorMessage + help_beginning);
-                StringAssert.EndsWith(sw.ToString(), help_ending);
+                StringAssert.Contains(sw.ToString(), expectedErrorMessage);
             }
         }
 
         [TestMethod()]
         public void Args_TransceiverAddress() {
             ProgramOptions programOptions = new ProgramOptions(new string[2] { "-a", "3D" });
+            programOptions.InitRigBasedDefaults("IC-7300");
             Assert.AreEqual("3D", programOptions.TransceiverAddress);
         }
 
@@ -178,8 +195,7 @@ namespace IcomClockOmniRig.Tests {
                     Assert.AreEqual(ExitCode.OPTION_TRANSCEIVER_ADDRESS, e.ExitCode);
                     Assert.AreEqual("", e.Message);
                 }
-                StringAssert.StartsWith(sw.ToString(), expectedErrorMessage + help_beginning);
-                StringAssert.EndsWith(sw.ToString(), help_ending);
+                StringAssert.Contains(sw.ToString(), expectedErrorMessage);
             }
         }
 
@@ -195,8 +211,7 @@ namespace IcomClockOmniRig.Tests {
                     Assert.AreEqual(ExitCode.OPTION_TRANSCEIVER_ADDRESS, e.ExitCode);
                     Assert.AreEqual("", e.Message);
                 }
-                StringAssert.StartsWith(sw.ToString(), expectedErrorMessage + help_beginning);
-                StringAssert.EndsWith(sw.ToString(), help_ending);
+                StringAssert.Contains(sw.ToString(), expectedErrorMessage);
             }
         }
 
@@ -218,8 +233,7 @@ namespace IcomClockOmniRig.Tests {
                     Assert.AreEqual(ExitCode.OPTION_CONTROLLER_ADDRESS, e.ExitCode);
                     Assert.AreEqual("", e.Message);
                 }
-                StringAssert.StartsWith(sw.ToString(), expectedErrorMessage + help_beginning);
-                StringAssert.EndsWith(sw.ToString(), help_ending);
+                StringAssert.Contains(sw.ToString(), expectedErrorMessage);
             }
         }
 
@@ -235,8 +249,7 @@ namespace IcomClockOmniRig.Tests {
                     Assert.AreEqual(ExitCode.OPTION_CONTROLLER_ADDRESS, e.ExitCode);
                     Assert.AreEqual("", e.Message);
                 }
-                StringAssert.StartsWith(sw.ToString(), expectedErrorMessage + help_beginning);
-                StringAssert.EndsWith(sw.ToString(), help_ending);
+                StringAssert.Contains(sw.ToString(), expectedErrorMessage);
             }
         }
 
@@ -260,8 +273,7 @@ namespace IcomClockOmniRig.Tests {
                     Assert.AreEqual(ExitCode.OPTION_OMNIRIG_VERSION, e.ExitCode);
                     Assert.AreEqual("", e.Message);
                 }
-                StringAssert.StartsWith(sw.ToString(), expectedErrorMessage + help_beginning);
-                StringAssert.EndsWith(sw.ToString(), help_ending);
+                StringAssert.Contains(sw.ToString(), expectedErrorMessage);
             }
         }
 
@@ -277,8 +289,7 @@ namespace IcomClockOmniRig.Tests {
                     Assert.AreEqual(ExitCode.OPTION_OMNIRIG_VERSION, e.ExitCode);
                     Assert.AreEqual("", e.Message);
                 }
-                StringAssert.StartsWith(sw.ToString(), expectedErrorMessage + help_beginning);
-                StringAssert.EndsWith(sw.ToString(), help_ending);
+                StringAssert.Contains(sw.ToString(), expectedErrorMessage);
             }
         }
 
@@ -286,12 +297,6 @@ namespace IcomClockOmniRig.Tests {
         public void Args_Quiet() {
             ProgramOptions programOptions = new ProgramOptions(new string[1] { "-q" });
             Assert.IsTrue(programOptions.Quiet);
-        }
-
-        [TestMethod()]
-        public void Args_ForceTranceiverModel() {
-            ProgramOptions programOptions = new ProgramOptions(new string[1] { "-f" });
-            Assert.IsTrue(programOptions.ForceTranceiverModel);
         }
 
         [TestMethod()]
@@ -311,10 +316,27 @@ namespace IcomClockOmniRig.Tests {
         }
 
         [TestMethod()]
+        public void Args_Help_Quiet() {
+            using (StringWriter sw = new StringWriter()) {
+                Console.SetOut(sw);
+                try {
+                    ProgramOptions programOptions = new ProgramOptions(new string[2] { "-h", "-q" });
+                } catch (ExitException e) {
+                    // Help throws an ExitCode.SUCCESS to terminate the program nicely.
+                    Assert.AreEqual(ExitCode.SUCCESS, e.ExitCode);
+                    Assert.AreEqual("", e.Message);
+                }
+                StringAssert.StartsWith(sw.ToString(), help_beginning);
+                StringAssert.EndsWith(sw.ToString(), help_ending);
+            }
+        }
+
+        [TestMethod()]
         public void LookupTransceiverAddress() {
             ProgramOptions programOptions = new ProgramOptions(new string[0]);
+            programOptions.InitRigBasedDefaults("IC-7300");
             Assert.AreEqual("94", programOptions.LookupTransceiverAddress());
-            programOptions = new ProgramOptions(new string[2] { "-m", "IC-7100" });
+            programOptions = new ProgramOptions(new string[2] { "-m", "IC-7100" }); 
             Assert.AreEqual("88", programOptions.LookupTransceiverAddress());
             programOptions = new ProgramOptions(new string[2] { "-m", "IC-7300" });
             Assert.AreEqual("94", programOptions.LookupTransceiverAddress());
@@ -326,6 +348,7 @@ namespace IcomClockOmniRig.Tests {
         [TestMethod()]
         public void LookupCommandTest_Default() {
             ProgramOptions programOptions = new ProgramOptions(new string[0]);
+            programOptions.InitRigBasedDefaults("IC-7300");
             Assert.AreEqual("FEFE94E01A05009420200524FD", programOptions.LookupCommand("setDateCommand", "20200524"));
             Assert.AreEqual("FEFE94E01A0500951340FD", programOptions.LookupCommand("setTimeCommand", "1340"));
             Assert.AreEqual("FEFE94E01A05009650001FD", programOptions.LookupCommand("setUtcOffsetCommand", "50001"));
@@ -334,6 +357,7 @@ namespace IcomClockOmniRig.Tests {
         [TestMethod()]
         public void LookupCommandTest_Custom_Addresses() {
             ProgramOptions programOptions = new ProgramOptions(new string[4] { "-a", "C8", "-c", "44" });
+            programOptions.InitRigBasedDefaults("IC-7300");
             Assert.AreEqual("FEFEC8441A05009420200524FD", programOptions.LookupCommand("setDateCommand", "20200524"));
             Assert.AreEqual("FEFEC8441A0500951340FD", programOptions.LookupCommand("setTimeCommand", "1340"));
             Assert.AreEqual("FEFEC8441A05009650001FD", programOptions.LookupCommand("setUtcOffsetCommand", "50001"));
@@ -341,7 +365,8 @@ namespace IcomClockOmniRig.Tests {
 
         [TestMethod()]
         public void LookupCommandTest_IC7100() {
-            ProgramOptions programOptions = new ProgramOptions(new string[2] { "-m", "IC-7100" });
+            ProgramOptions programOptions = new ProgramOptions(new string[0]);
+            programOptions.InitRigBasedDefaults("IC-7100");
             Assert.AreEqual("FEFE88E01A05012020200524FD", programOptions.LookupCommand("setDateCommand", "20200524"));
             Assert.AreEqual("FEFE88E01A0501211340FD", programOptions.LookupCommand("setTimeCommand", "1340"));
             Assert.AreEqual("FEFE88E01A05012350001FD", programOptions.LookupCommand("setUtcOffsetCommand", "50001"));
@@ -349,7 +374,8 @@ namespace IcomClockOmniRig.Tests {
 
         [TestMethod()]
         public void LookupCommandTest_IC7610() {
-            ProgramOptions programOptions = new ProgramOptions(new string[2] { "-m", "IC-7610" });
+            ProgramOptions programOptions = new ProgramOptions(new string[0]);
+            programOptions.InitRigBasedDefaults("IC-7610");
             Assert.AreEqual("FEFE98E01A05015820200524FD", programOptions.LookupCommand("setDateCommand", "20200524"));
             Assert.AreEqual("FEFE98E01A0501591340FD", programOptions.LookupCommand("setTimeCommand", "1340"));
             Assert.AreEqual("FEFE98E01A05016250001FD", programOptions.LookupCommand("setUtcOffsetCommand", "50001"));
@@ -359,6 +385,7 @@ namespace IcomClockOmniRig.Tests {
         [ExpectedException(typeof(KeyNotFoundException), "Command setFooBar not found for tranceiver IC-7300")]
         public void LookupCommandTest_MissingCommand() {
             ProgramOptions programOptions = new ProgramOptions(new string[0]);
+            programOptions.InitRigBasedDefaults("IC-7300");
             programOptions.LookupCommand("setFooBar", "20200524");
         }
     }
