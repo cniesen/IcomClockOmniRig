@@ -1,3 +1,8 @@
+![Latest Release](https://img.shields.io/github/v/release/cniesen/IcomClockOmniRig) 
+![Run Tests](https://github.com/cniesen/IcomClockOmniRig/actions/workflows/tests.yml/badge.svg) 
+![Downloads](https://img.shields.io/github/downloads/cniesen/IcomClockOmniRig/total)
+
+
 IcomClockOmniRig
 ================
 Windows command line program for setting the internal clock of the Icom tranceivers like IC-7300, IC-7100 and IC-R8600 via OmniRig.
