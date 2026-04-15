@@ -1,0 +1,57 @@
+name: Run Tests
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  test:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+
+    - name: Restore
+      run: dotnet restore IcomClockOmniRig.sln
+
+    - name: Build
+      run: dotnet build IcomClockOmniRig.sln --configuration Release
+      
+    - name: Locate VSTest
+      id: locate_vstest
+      shell: pwsh
+      run: |
+        $knownPath = "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe"
+
+        if (Test-Path $knownPath) {
+            Write-Host "Found vstest.console.exe at known path:"
+            Write-Host $knownPath
+            echo "VSTEST_PATH=$knownPath" >> $env:GITHUB_ENV
+            exit 0
+        }
+
+        Write-Host "Known path not found. Performing recursive search..."
+
+        $vstest = Get-ChildItem "C:\Program Files" -Recurse -Filter vstest.console.exe -ErrorAction SilentlyContinue | Select-Object -First 1
+        if (-not $vstest) {
+            Write-Error "vstest.console.exe not found anywhere on this runner"
+            exit 1
+        }
+
+        Write-Host "Found vstest.console.exe via search:"
+        Write-Host $vstest.FullName
+
+        echo "VSTEST_PATH=$($vstest.FullName)" >> $env:GITHUB_ENV
+
+    - name: Run MSTest tests
+      shell: pwsh
+      run: |
+        & "$env:VSTEST_PATH" IcomClockOmniRigTests\bin\Release\net472\IcomClockOmniRigTests.dll /Platform:x64
