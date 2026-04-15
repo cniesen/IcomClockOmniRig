@@ -38,10 +38,12 @@ namespace IcomClockOmniRig {
 		private const string Preamble = "FEFE";
 		private const string Postamble = "FD";
 
+		// CI-V configuration for the specific transceiver
 		private readonly IDictionary<string, IDictionary<string, string>> Transceivers = new Dictionary<string, IDictionary<string, string>>() {
 			{"IC-705", new Dictionary<string, string> {{"setDateCommand", "1A050165"}, {"setTimeCommand", "1A050166"}, {"setUtcOffsetCommand", "1A050170"}, {"transceiverAddress", "A4"}}},
 			{"IC-7100", new Dictionary<string, string> {{"setDateCommand", "1A050120"}, {"setTimeCommand", "1A050121"}, {"setUtcOffsetCommand", "1A050123"}, {"transceiverAddress", "88"}}},
 			{"IC-7300", new Dictionary<string, string> {{"setDateCommand", "1A050094"}, {"setTimeCommand", "1A050095"}, {"setUtcOffsetCommand", "1A050096"}, {"transceiverAddress", "94"}}},
+			{"IC-7300MK2", new Dictionary<string, string> {{"setDateCommand", "1A050132"}, {"setTimeCommand", "1A050133"}, {"setUtcOffsetCommand", "1A050136"}, {"transceiverAddress", "B6"}}},
 			{"IC-7600", new Dictionary<string, string> {{"setDateCommand", "1A050053"}, {"setTimeCommand", "1A050054"}, {"setUtcOffsetCommand", "1A050056"}, {"transceiverAddress", "7A"}}},
 			{"IC-7610", new Dictionary<string, string> {{"setDateCommand", "1A050158"}, {"setTimeCommand", "1A050159"}, {"setUtcOffsetCommand", "1A050162"}, {"transceiverAddress", "98"}}},
 			{"IC-7700", new Dictionary<string, string> {{"setDateCommand", "1A050058"}, {"setTimeCommand", "1A050059"}, {"setUtcOffsetCommand", "1A050061"}, {"transceiverAddress", "74"}}},
@@ -52,10 +54,12 @@ namespace IcomClockOmniRig {
 			{"IC-R9500", new Dictionary<string, string> {{"setDateCommand", "1A050048"}, {"setTimeCommand", "1A050049"}, {"setUtcOffsetCommand", "1A050051"}, {"transceiverAddress", "72"}}}
 		};
 
+		// List of RIG INI files from Omnirig with maping to our configuration
 		private readonly IDictionary<string, string> RigTypes = new Dictionary<string, string>() {
 			{"IC-705", "IC-705"}, {"IC-705-DATA", "IC-705-DATA"},
 			{"IC-7100", "IC-7100"}, {"IC-7100-DATA-FIL1", "IC-7100"}, {"IC-7100e4", "IC-7100"}, {"IC-7100e4-DATA", "IC-7100"},
 			{"IC-7300", "IC-7300"}, {"IC-7300-DATA", "IC-7300"},
+			{"IC-7300MK2", "IC-7300MK2"},
 			{"IC-7600", "IC-7600"}, {"IC-7600v2", "IC-7600"}, {"IC-7600v2-DATA", "IC-7600"},
 			{"IC-7610", "IC-7610"}, {"IC-7610-DATA", "IC-7610"}, {"IC-7610-DATA-FIL1", "IC-7610"},
 			{"IC-7700", "IC-7700"}, {"IC-7700v2", "IC-7700"}, {"IC-7700v2-DATA", "IC-7700"},
@@ -179,7 +183,7 @@ namespace IcomClockOmniRig {
 			Console.Write(
 				" ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n" +
 				" ::                                                                          ::\n" +
-				" ::   IcomClockOmniRig 2.1  -  https://github.com/cniesen/IcomClockOmniRig   ::\n" +
+				" ::   IcomClockOmniRig 2.2  -  https://github.com/cniesen/IcomClockOmniRig   ::\n" +
 				" ::                                                                          ::\n" +
 				" ::    A program to set the Icom tranceiver clock to your computer's time    ::\n" +
 				" ::                                                                          ::\n" +

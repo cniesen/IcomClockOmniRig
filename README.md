@@ -16,7 +16,7 @@ Program Options
 C:\>IcomClockOmniRig.exe -h
  ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
  ::                                                                          ::
- ::   IcomClockOmniRig 2.1  -  https://github.com/cniesen/IcomClockOmniRig   ::
+ ::   IcomClockOmniRig 2.2  -  https://github.com/cniesen/IcomClockOmniRig   ::
  ::                                                                          ::
  ::    A program to set the Icom tranceiver clock to your computer's time    ::
  ::                                                                          ::
@@ -48,19 +48,20 @@ Options:
 Supported Transceivers
 ----------------------
 
-| Transceiver   | Date Command | Time Command | UTC Offset Command | Transceiver Address | Tested with OmniRig | Tested with OmniRig 2 |
-|---------------|--------------|--------------|--------------------|---------------------|---------------------|-----------------------|
-| Icom IC-705   | 1A050165     | 1A050166     | 1A050170           | A4                  |                     |                       |
-| Icom IC-7100  | 1A050120     | 1A050121     | 1A050123           | 88                  |                     |                       | 
-| Icom IC-7300  | 1A050094     | 1A050095     | 1A050096           | 94                  | AE0S (2.1)          | AE0S (2.0)            |
-| Icom IC-7600  | 1A050053     | 1A050054     | 1A050056           | 7A                  |                     |                       |
-| Icom IC-7610  | 1A050158     | 1A050159     | 1A050162           | 98                  | VE3NEA (2.0)        |                       |
-| Icom IC-7700  | 1A050058     | 1A050059     | 1A050061           | 74                  |                     |                       |
-| Icom IC-7850  | 1A050095     | 1A050096     | 1A050099           | 8E                  |                     |                       |
-| Icom IC-7851  | 1A050095     | 1A050096     | 1A050099           | 8E                  |                     |                       |
-| Icom IC-9700  | 1A050179     | 1A050180     | 1A050184           | A2                  |                     |                       |
-| Icom IC-R8600 | 1A050131     | 1A050132     | 1A050135           | 96                  |                     |                       |
-| Icom IC-R9500 | 1A050048     | 1A050049     | 1A050051           | 72                  |                     |                       |
+| Transceiver      | Date Command | Time Command | UTC Offset Command | Transceiver Address | Tested with OmniRig | Tested with OmniRig 2 |
+|------------------|--------------|--------------|--------------------|---------------------|---------------------|-----------------------|
+| Icom IC-705      | 1A050165     | 1A050166     | 1A050170           | A4                  |                     |                       |
+| Icom IC-7100     | 1A050120     | 1A050121     | 1A050123           | 88                  |                     |                       | 
+| Icom IC-7300     | 1A050094     | 1A050095     | 1A050096           | 94                  | AE0S (2.2)          | AE0S (2.0)            |
+| Icom IC-7300MK2  | 1A050132     | 1A050133     | 1A050136           | B6                  |                     |                       |
+| Icom IC-7600     | 1A050053     | 1A050054     | 1A050056           | 7A                  |                     |                       |
+| Icom IC-7610     | 1A050158     | 1A050159     | 1A050162           | 98                  | VE3NEA (2.0)        |                       |
+| Icom IC-7700     | 1A050058     | 1A050059     | 1A050061           | 74                  |                     |                       |
+| Icom IC-7850     | 1A050095     | 1A050096     | 1A050099           | 8E                  |                     |                       |
+| Icom IC-7851     | 1A050095     | 1A050096     | 1A050099           | 8E                  |                     |                       |
+| Icom IC-9700     | 1A050179     | 1A050180     | 1A050184           | A2                  |                     |                       |
+| Icom IC-R8600    | 1A050131     | 1A050132     | 1A050135           | 96                  |                     |                       |
+| Icom IC-R9500    | 1A050048     | 1A050049     | 1A050051           | 72                  |                     |                       |
 
 Tested IcomClockOmniRig version in parentheses.
 
