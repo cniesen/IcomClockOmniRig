@@ -19,9 +19,9 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace IcomClockOmniRig.Tests {
-    [TestClass()]
+    [TestClass]
     public class UtilitiesTests {
-        [TestMethod()]
+        [TestMethod]
         public void IsDigitTest() {
             Assert.IsTrue(Utilities.IsDigit("0"));
             Assert.IsTrue(Utilities.IsDigit("1"));
@@ -44,7 +44,7 @@ namespace IcomClockOmniRig.Tests {
             Assert.IsFalse(Utilities.IsDigit("1 0"));
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void IsHexTest() {
             Assert.IsTrue(Utilities.IsHex("00"));
             Assert.IsTrue(Utilities.IsHex("01"));
@@ -66,29 +66,29 @@ namespace IcomClockOmniRig.Tests {
             Assert.IsFalse(Utilities.IsHex("00 00"));
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void HIWORD() {
             Assert.AreEqual(1, Utilities.HIWORD(65555));
             Assert.AreEqual(2, Utilities.HIWORD(131073));
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void LOWORD() {
             Assert.AreEqual(19, Utilities.LOWORD(65555));
             Assert.AreEqual(1, Utilities.LOWORD(131073));
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void HIBYTE() {
             Assert.AreEqual(1, Utilities.HIBYTE(257));
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void LOBYTE() {
             Assert.AreEqual(1, Utilities.LOBYTE(257));
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void HexStringToByteArray() {
             CollectionAssert.AreEqual(new byte[] { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F }, Utilities.HexStringToByteArray("000102030405060708090A0B0C0D0E0F"));
             CollectionAssert.AreEqual(new byte[] { 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, 0x1E, 0x1F }, Utilities.HexStringToByteArray("101112131415161718191A1B1C1D1E1F"));
@@ -108,7 +108,7 @@ namespace IcomClockOmniRig.Tests {
             CollectionAssert.AreEqual(new byte[] { 0xF0, 0xF1, 0xF2, 0xF3, 0xF4, 0xF5, 0xF6, 0xF7, 0xF8, 0xF9, 0xFA, 0xFB, 0xFC, 0xFD, 0xFE, 0xFF }, Utilities.HexStringToByteArray("F0F1F2F3F4F5F6F7F8F9FAFBFCFDFEFF"));
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void ByteArrayToHexString() {
             Assert.AreEqual("000102030405060708090A0B0C0D0E0F", Utilities.ByteArrayToHexString(new byte[] { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F }));
             Assert.AreEqual("101112131415161718191A1B1C1D1E1F", Utilities.ByteArrayToHexString(new byte[] { 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, 0x1E, 0x1F }));

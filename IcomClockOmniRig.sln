@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30011.22
+# Visual Studio Version 18
+VisualStudioVersion = 18.5.11709.299 stable
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IcomClockOmniRig", "IcomClockOmniRig\IcomClockOmniRig.csproj", "{5B6651E0-41F7-4DF8-B4CE-7A18661EECC6}"
 EndProject
@@ -24,8 +24,5 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {61536D38-8949-4345-B8AA-0A1BA78F5F7C}
 	EndGlobalSection
 EndGlobal
